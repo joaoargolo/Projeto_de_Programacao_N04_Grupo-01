@@ -19,4 +19,5 @@ public class Gerente extends Pessoa{
 	public void removerEvento() {
 		System.out.println("O evento foi removido.");
 	}
+	
 }
