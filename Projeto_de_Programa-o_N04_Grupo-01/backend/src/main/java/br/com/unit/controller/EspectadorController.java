@@ -4,6 +4,15 @@ import org.springframework.web.bind.annotation.*;
 import br.com.unit.classes.Espectador;
 import java.util.*;
 
+//{
+//  "nome": "Ana",
+//  "cpf": "11122233344",
+//  "email": "ana@example.com",
+//  "senha": "1234",
+//  "dataNasc": "2001-07-10",
+//  "idEspectador": 3
+//}
+
 @RestController
 @RequestMapping("/espectadores")
 public class EspectadorController {
