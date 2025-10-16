@@ -5,7 +5,7 @@ import br.com.unit.classes.Condutor;
 
 import java.util.*;
 
-
+//POST http://localhost:8080/condutores
 //{
 //  "nome": "João",
 //  "cpf": "12345678900",

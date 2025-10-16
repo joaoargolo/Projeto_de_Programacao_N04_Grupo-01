@@ -4,6 +4,7 @@ import org.springframework.web.bind.annotation.*;
 import br.com.unit.classes.*;
 import java.util.*;
 
+//POST http://localhost:8080/eventos
 //{
 //  "idEvento": 1,
 //  "nomeEvento": "Workshop Java",

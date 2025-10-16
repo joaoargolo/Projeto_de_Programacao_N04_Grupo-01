@@ -4,6 +4,7 @@ import org.springframework.web.bind.annotation.*;
 import br.com.unit.classes.Gerente;
 import java.util.*;
 
+//POST http://localhost:8080/gerentes
 //{
 //  "nome": "Alan Rocha",
 //  "cpf": "12345678900",

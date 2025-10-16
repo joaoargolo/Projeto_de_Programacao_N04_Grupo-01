@@ -4,6 +4,7 @@ import org.springframework.web.bind.annotation.*;
 import br.com.unit.classes.Espectador;
 import java.util.*;
 
+//POST http://localhost:8080/espectadores
 //{
 //  "nome": "Ana",
 //  "cpf": "11122233344",
