@@ -11,7 +11,7 @@
 
 <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="508.0" prefWidth="742.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <AnchorPane layoutX="160.0" layoutY="72.0" prefHeight="364.0" prefWidth="437.0" style="-fx-background-color: white; -fx-background-radius: 15px; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.25), 10, 0.5, 2, 2);">
+      <AnchorPane layoutX="160.0" layoutY="72.0" prefHeight="364.0" prefWidth="437.0" style="-fx-background-color: white; -fx-background-radius: 8px; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.25), 10, 0.5, 2, 2);">
          <children>
             <Line endX="302.0" layoutX="134.0" layoutY="63.0" opacity="0.5" startX="-134.0" strokeWidth="0.5" />
             <Label alignment="CENTER" layoutX="101.0" layoutY="12.0" prefHeight="51.0" prefWidth="234.0" text="Login">
