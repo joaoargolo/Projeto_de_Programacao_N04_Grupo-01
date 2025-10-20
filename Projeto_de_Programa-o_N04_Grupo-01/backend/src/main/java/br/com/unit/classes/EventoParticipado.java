@@ -1,10 +1,18 @@
 package br.com.unit.classes;
 
-public class EventoParticipado extends Evento{
+import jakarta.persistence.*;
+import lombok.*;
 
-    protected EventoParticipado(int idEvento, String nomeEvento, String descricaoEvento, String dataInicio, String dataFim, int capacidade) {
-        super(idEvento, nomeEvento, descricaoEvento, dataInicio, dataFim, capacidade);
-    }
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Entity
+@Table(name = "evento_participado")
+public class EventoParticipado extends Evento{
+    
+    @Id 
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int idEventoParticipado;
 
     @Override
     public void mostrarInformacaoEvento() {

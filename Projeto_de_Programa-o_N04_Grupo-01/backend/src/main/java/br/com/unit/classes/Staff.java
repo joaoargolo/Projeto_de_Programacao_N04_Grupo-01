@@ -1,40 +1,30 @@
 package br.com.unit.classes;
 
-public class Staff extends Pessoa{
-	private int idStaff; 
-	private String especializacao;
-	private String eventoAuxiliado;
+import jakarta.persistence.*;
+import lombok.*;
 
-	protected Staff(String nome, String cpf, String email, String senha, String dataNasc, int idStaff,
-			String especializacao, String eventoAuxiliado) {
-		super(nome, cpf, email, senha, dataNasc);
-		this.idStaff = idStaff;
-		this.especializacao = especializacao;
-		this.eventoAuxiliado = eventoAuxiliado;
-	}
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Entity
+@Table(name = "staffs")
+public class Staff extends Pessoa {
 
-	private int getIdStaff() {
-		return idStaff;
-	}
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer idStaff;
 
-	private String getEspecializacao() {
-		return especializacao;
-	}
+    @Column(nullable = false)
+    private String especializacao;
 
-	private String getEventoAuxiliado() {
-		return eventoAuxiliado;
-	}
+    @Column(nullable = false)
+    private String eventoAuxiliado;
 
-	private void setEventoAuxiliado(String eventoAuxiliado) {
-		this.eventoAuxiliado = eventoAuxiliado;
-	}
-	
-	public void atribuirEvento() {
-		System.out.println("O seguinte evento foi atribuido: ");
-	}
-	
-	public void removerEvento() {
-		System.out.println("O seguinte evento foi removido: ");
-	}
-	
+    public void atribuirEvento() {
+        System.out.println("O seguinte evento foi atribuído: " + eventoAuxiliado);
+    }
+
+    public void removerEvento() {
+        System.out.println("O seguinte evento foi removido: " + eventoAuxiliado);
+    }
 }

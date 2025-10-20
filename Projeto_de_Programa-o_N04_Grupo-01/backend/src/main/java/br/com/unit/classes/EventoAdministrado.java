@@ -1,10 +1,18 @@
 package br.com.unit.classes;
 
+import jakarta.persistence.*;
+import lombok.*;
+
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Entity
+@Table(name = "evento_administrado")
 public class EventoAdministrado extends Evento{
 
-    protected EventoAdministrado(int idEvento, String nomeEvento, String descricaoEvento, String dataInicio, String dataFim, int capacidade) {
-        super(idEvento, nomeEvento, descricaoEvento, dataInicio, dataFim, capacidade);
-    }
+    @Id 
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int idEventoAdministrado;
 
     @Override
     public void mostrarInformacaoEvento() {

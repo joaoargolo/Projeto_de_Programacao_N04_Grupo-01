@@ -1,16 +1,18 @@
 package br.com.unit.classes;
 
-public class Espectador extends Pessoa {
-    private int idEspectador;
+import jakarta.persistence.*;
+import lombok.*;
 
-    protected Espectador(String nome, String cpf, String email, String senha, String dataNasc, int idEspectador) {
-        super(nome, cpf, email, senha, dataNasc);
-        this.idEspectador = idEspectador;
-    }
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Entity
+@Table(name = "espectadores")
+public class Condutor extends Pessoa {
 
-    public int getIdEspectador() {
-        return idEspectador;
-    }
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer idEspectador;
 
     public void cadastrarEvento() {
         System.out.println("O usuário foi cadastrado no evento.");
