@@ -1,0 +1,41 @@
+version: "3.9"
+
+services:
+  backend:
+    build: ./backend
+    container_name: projeto-backend
+    ports:
+      - "8080:8080"
+    restart: always
+
+
+#Quando adicionar o frontend, criar um dockerfile para o mesmo e descomentar essa parte abaixo.
+#  frontend:
+#    build: ./frontend
+#    container_name: projeto-frontend
+#    ports:
+#      - "3000:80"
+#    depends_on:
+#      - backend
+#    restart: always
+
+
+#Quando adicionar o banco de dados.
+#  db:
+#    image: mysql:5.7
+#    container_name: projeto-db
+#    environment:
+#      MYSQL_ROOT_PASSWORD: sua_senha 
+#      MYSQL_DATABASE: nome_do_banco
+#      MYSQL_USER: usuario_do_banco
+#      MYSQL_PASSWORD: senha_do_usuario
+#    ports:
+#      - "3306:3306"
+#    volumes:
+#      - db_data:/var/lib/mysql
+#    restart: always
+
+
+#volumes:
+#  db_data:
+#    driver: local
