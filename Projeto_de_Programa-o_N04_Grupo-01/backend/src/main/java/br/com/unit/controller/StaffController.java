@@ -11,7 +11,6 @@ import java.util.*;
 //  "email": "luiz@example.com",
 //  "senha": "1234",
 //  "dataNasc": "2005-03-12",
-//  "idStaff": 7
 //  "especializacao": "mixagem"
 //  "eventoAuxiliado": "Taylor_Swift:_The_Eras_Tour"
 //}
@@ -22,16 +21,16 @@ public class StaffController {
 
     private List<Staff> staff = new ArrayList<>();
 
-    @GetMapping
+    @GetMapping("/staff/listar")
     public List<Staff> listarStaff() { return staff; }
 
-    @PostMapping
+    @PostMapping("/staff/criar")
     public String criarStaff(@RequestBody Staff staff1){
         staff.add(staff1);
         return "Membro do staff cadastrado com sucesso: " + staff1.getIdStaff();
     }
 
-    @Deletemapping("/{id}")
+    @Deletemapping("/staff/deletar/{id}")
     public String removerStaff(@PathVariable int id){
         staff.removeIf(e -> e.getIdStaff() == id);
         return "Membro do staff com ID " + id + " removido com sucesso!";

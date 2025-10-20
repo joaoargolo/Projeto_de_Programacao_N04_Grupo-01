@@ -11,7 +11,6 @@ import java.util.*;
 //  "email": "alan@example.com",
 //  "senha": "1234",
 //  "dataNasc": "2000-01-01",
-//  "idGerente": 1
 //}
 
 @RestController
@@ -20,14 +19,20 @@ public class GerenteController {
 
     private List<Gerente> gerentes = new ArrayList<>();
 
-    @PostMapping
+    @PostMapping("/gerentes/criar")
     public String cadastrarGerente(@RequestBody Gerente g) {
         gerentes.add(g);
         return "Gerente cadastrado: " + g.getNome();
     }
 
-    @GetMapping
+    @GetMapping("/gerentes/listar")
     public List<Gerente> listarGerentes() {
         return gerentes;
+    }
+
+    @DeleteMapping("/gerentes/deletar/{id}")
+    public String removerGerente(@PathVariable int id){
+        gerentes.removeIf(e -> e.getIdGerente() == id);
+        return "Gerente com o id " + id + " foi removido com sucesso!";
     }
 }

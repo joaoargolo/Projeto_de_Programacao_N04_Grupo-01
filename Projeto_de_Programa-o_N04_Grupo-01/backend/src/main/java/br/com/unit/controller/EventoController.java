@@ -6,7 +6,6 @@ import java.util.*;
 
 //POST http://localhost:8080/eventos
 //{
-//  "idEvento": 1,
 //  "nomeEvento": "Workshop Java",
 //  "descricaoEvento": "Aprenda Spring Boot",
 //  "dataInicio": "2025-10-20",
@@ -20,18 +19,18 @@ public class EventoController {
 
     private List<EventoParticipado> eventos = new ArrayList<>();
 
-    @GetMapping
+    @GetMapping("/eventos/listar")
     public List<EventoParticipado> listarEventos() {
         return eventos;
     }
 
-    @PostMapping
+    @PostMapping("/eventos/criar")
     public String criarEvento(@RequestBody EventoParticipado evento) {
         eventos.add(evento);
         return "Evento cadastrado com sucesso: " + evento.getNomeEvento();
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/eventos/deletar/{id}")
     public String removerEvento(@PathVariable int id) {
         eventos.removeIf(e -> e.getIdEvento() == id);
         return "Evento com ID " + id + " removido com sucesso!";

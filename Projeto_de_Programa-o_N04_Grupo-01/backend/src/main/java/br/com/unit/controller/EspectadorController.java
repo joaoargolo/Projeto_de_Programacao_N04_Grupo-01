@@ -11,7 +11,6 @@ import java.util.*;
 //  "email": "ana@example.com",
 //  "senha": "1234",
 //  "dataNasc": "2001-07-10",
-//  "idEspectador": 3
 //}
 
 @RestController
@@ -20,18 +19,18 @@ public class EspectadorController {
 
     private List<Espectador> espectadores = new ArrayList<>();
 
-    @GetMapping
+    @GetMapping("/espectadores/listar")
     public List<Espectador> listarEspectadores() {
         return espectadores;
     }
 
-    @PostMapping
+    @PostMapping("/espectadores/criar")
     public String criarEspectador(@RequestBody Espectador espectador) {
         espectadores.add(espectador);
         return "Espectador cadastrado com sucesso: " + espectador.getIdEspectador();
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/espectadores/deletar/{id}")
     public String removerEspectador(@PathVariable int id) {
         espectadores.removeIf(e -> e.getIdEspectador() == id);
         return "Espectador com ID " + id + " removido com sucesso!";

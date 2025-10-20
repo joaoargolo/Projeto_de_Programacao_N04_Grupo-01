@@ -12,7 +12,6 @@ import java.util.*;
 //  "email": "joao@example.com",
 //  "senha": "1234",
 //  "dataNasc": "1990-05-10",
-//  "idCondutor": 1,
 //  "eventoConduzido": "Workshop Spring Boot"
 //}
 
@@ -23,18 +22,18 @@ public class CondutorController {
 
     private List<Condutor> condutores = new ArrayList<>();
 
-    @GetMapping
+    @GetMapping("/condutores/listar")
     public List<Condutor> listarCondutores() {
         return condutores;
     }
 
-    @PostMapping
+    @PostMapping("/condutores/criar")
     public String criarCondutor(@RequestBody Condutor condutor) {
         condutores.add(condutor);
         return "Condutor cadastrado com sucesso: " + condutor.getIdCondutor();
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/condutores/deletar/{id}")
     public String removerCondutor(@PathVariable int id) {
         condutores.removeIf(c -> c.getIdCondutor() == id);
         return "Condutor com ID " + id + " removido com sucesso!";
