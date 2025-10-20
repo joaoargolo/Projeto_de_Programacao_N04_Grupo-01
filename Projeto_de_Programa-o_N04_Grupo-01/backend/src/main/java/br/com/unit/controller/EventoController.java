@@ -27,6 +27,7 @@ public class EventoController {
 
     @PostMapping
     public String criarEvento(@RequestBody EventoParticipado evento) {
+
         eventos.add(evento);
         return "Evento cadastrado com sucesso: " + evento.getNomeEvento();
     }
