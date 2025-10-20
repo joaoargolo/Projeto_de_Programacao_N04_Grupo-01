@@ -13,6 +13,9 @@ public class PaginaTeste extends Application {
         Scene scene = new Scene(root);
         stage.setTitle("Testes com a página");
         stage.setScene(scene);
+        stage.setWidth(750);
+        stage.setHeight(750);
+        stage.setResizable(false);
         stage.show();
 
     }
