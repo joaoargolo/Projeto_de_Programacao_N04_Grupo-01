@@ -31,7 +31,7 @@ public class EventoController {
     }
 
     @DeleteMapping("/eventos/deletar/{id}")
-    public String removerEvento(@PathVariable int id) {
+    public String removerEvento(@PathVariable long id) {
         eventos.removeIf(e -> e.getIdEvento() == id);
         return "Evento com ID " + id + " removido com sucesso!";
     }

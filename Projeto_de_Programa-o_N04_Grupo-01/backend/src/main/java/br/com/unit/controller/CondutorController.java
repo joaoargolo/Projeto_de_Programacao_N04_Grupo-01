@@ -34,7 +34,7 @@ public class CondutorController {
     }
 
     @DeleteMapping("/condutores/deletar/{id}")
-    public String removerCondutor(@PathVariable int id) {
+    public String removerCondutor(@PathVariable long id) {
         condutores.removeIf(c -> c.getIdCondutor() == id);
         return "Condutor com ID " + id + " removido com sucesso!";
     }

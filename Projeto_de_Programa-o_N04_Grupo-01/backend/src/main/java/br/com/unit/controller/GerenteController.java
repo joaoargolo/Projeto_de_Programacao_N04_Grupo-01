@@ -31,7 +31,7 @@ public class GerenteController {
     }
 
     @DeleteMapping("/gerentes/deletar/{id}")
-    public String removerGerente(@PathVariable int id){
+    public String removerGerente(@PathVariable long id){
         gerentes.removeIf(e -> e.getIdGerente() == id);
         return "Gerente com o id " + id + " foi removido com sucesso!";
     }

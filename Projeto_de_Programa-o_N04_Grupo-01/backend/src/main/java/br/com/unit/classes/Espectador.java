@@ -1,14 +1,14 @@
 package br.com.unit.classes;
 
 public class Espectador extends Pessoa {
-    private int idEspectador;
+    private long idEspectador;
 
-    protected Espectador(String nome, String cpf, String email, String senha, String dataNasc, int idEspectador) {
+    protected Espectador(String nome, String cpf, String email, String senha, String dataNasc, long idEspectador) {
         super(nome, cpf, email, senha, dataNasc);
         this.idEspectador = idEspectador;
     }
 
-    public int getIdEspectador() {
+    public long getIdEspectador() {
         return idEspectador;
     }
 

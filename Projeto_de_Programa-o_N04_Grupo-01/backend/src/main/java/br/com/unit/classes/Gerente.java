@@ -1,14 +1,14 @@
 package br.com.unit.classes;
 
 public class Gerente extends Pessoa{
-    private int idGerente;
+    private long idGerente;
 
-    protected Gerente(String nome, String cpf, String email, String senha, String dataNasc, int idGerente) {
+    protected Gerente(String nome, String cpf, String email, String senha, String dataNasc, long idGerente) {
         super(nome, cpf, email, senha, dataNasc);
         this.idGerente = idGerente;
     }
 
-    private int getIdGerente() {
+    private long getIdGerente() {
         return idGerente;
     }
 

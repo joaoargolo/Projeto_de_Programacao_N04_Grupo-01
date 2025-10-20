@@ -2,7 +2,7 @@ package br.com.unit.classes;
 
 public class EventoParticipado extends Evento{
 
-    protected EventoParticipado(int idEvento, String nomeEvento, String descricaoEvento, String dataInicio, String dataFim, int capacidade) {
+    protected EventoParticipado(long idEvento, String nomeEvento, String descricaoEvento, String dataInicio, String dataFim, int capacidade) {
         super(idEvento, nomeEvento, descricaoEvento, dataInicio, dataFim, capacidade);
     }
 

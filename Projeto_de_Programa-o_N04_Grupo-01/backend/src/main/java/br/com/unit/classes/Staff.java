@@ -1,11 +1,11 @@
 package br.com.unit.classes;
 
 public class Staff extends Pessoa{
-	private int idStaff; 
+	private long idStaff;
 	private String especializacao;
 	private String eventoAuxiliado;
 
-	protected Staff(String nome, String cpf, String email, String senha, String dataNasc, int idStaff,
+	protected Staff(String nome, String cpf, String email, String senha, String dataNasc, long idStaff,
 			String especializacao, String eventoAuxiliado) {
 		super(nome, cpf, email, senha, dataNasc);
 		this.idStaff = idStaff;
@@ -13,7 +13,7 @@ public class Staff extends Pessoa{
 		this.eventoAuxiliado = eventoAuxiliado;
 	}
 
-	private int getIdStaff() {
+	private long getIdStaff() {
 		return idStaff;
 	}
 

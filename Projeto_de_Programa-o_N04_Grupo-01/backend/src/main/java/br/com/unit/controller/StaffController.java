@@ -31,7 +31,7 @@ public class StaffController {
     }
 
     @Deletemapping("/staff/deletar/{id}")
-    public String removerStaff(@PathVariable int id){
+    public String removerStaff(@PathVariable long id){
         staff.removeIf(e -> e.getIdStaff() == id);
         return "Membro do staff com ID " + id + " removido com sucesso!";
     }

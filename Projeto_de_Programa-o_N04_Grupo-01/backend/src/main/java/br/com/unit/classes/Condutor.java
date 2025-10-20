@@ -1,17 +1,17 @@
 package br.com.unit.classes;
 
 public class Condutor extends Pessoa {
-    private int idCondutor;
+    private long idCondutor;
     private String eventoConduzido;
 
     protected Condutor(String nome, String cpf, String email, String senha, String dataNasc,
-                       int idCondutor, String eventoConduzido) {
+                       long idCondutor, String eventoConduzido) {
         super(nome, cpf, email, senha, dataNasc);
         this.idCondutor = idCondutor;
         this.eventoConduzido = eventoConduzido;
     }
 
-    public int getIdCondutor() {
+    public long getIdCondutor() {
         return idCondutor;
     }
 

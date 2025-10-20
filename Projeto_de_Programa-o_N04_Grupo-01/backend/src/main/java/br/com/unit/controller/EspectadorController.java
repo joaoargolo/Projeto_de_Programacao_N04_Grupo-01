@@ -31,7 +31,7 @@ public class EspectadorController {
     }
 
     @DeleteMapping("/espectadores/deletar/{id}")
-    public String removerEspectador(@PathVariable int id) {
+    public String removerEspectador(@PathVariable long id) {
         espectadores.removeIf(e -> e.getIdEspectador() == id);
         return "Espectador com ID " + id + " removido com sucesso!";
     }

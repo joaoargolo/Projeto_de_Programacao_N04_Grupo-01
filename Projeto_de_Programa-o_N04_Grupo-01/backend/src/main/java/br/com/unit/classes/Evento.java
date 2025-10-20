@@ -1,14 +1,14 @@
 package br.com.unit.classes;
 
 abstract class Evento {
-    protected int idEvento;
+    protected long idEvento;
     public String nomeEvento;
     public String descricaoEvento;
     public String dataInicio;
     public String dataFim;
     public int capacidade;
 
-    protected Evento(int idEvento, String nomeEvento, String descricaoEvento, String dataInicio, String dataFim,
+    protected Evento(long idEvento, String nomeEvento, String descricaoEvento, String dataInicio, String dataFim,
                      int capacidade) {
         super();
         this.idEvento = idEvento;
@@ -19,7 +19,7 @@ abstract class Evento {
         this.capacidade = capacidade;
     }
 
-    public int getIdEvento() {
+    public long getIdEvento() {
         return idEvento;
     }
 
