@@ -20,7 +20,7 @@ services:
 #    restart: always
 
 
-#Quando adicionar o banco de dados.
+#Quando adicionar o banco de dados, modifique os exemplos de senha e nome para os seus.
 #  db:
 #    image: mysql:5.7
 #    container_name: projeto-db
