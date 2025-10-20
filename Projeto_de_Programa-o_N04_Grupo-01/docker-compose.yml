@@ -1,0 +1,20 @@
+version: "3.9"
+
+services:
+  backend:
+    build: ./backend
+    container_name: projeto-backend
+    ports:
+      - "8080:8080"
+    restart: always
+
+
+#Quando adicionar o frontend, criar um dockerfile para o mesmo e descomentar essa parte abaixo.
+#  frontend:
+#    build: ./frontend
+#    container_name: projeto-frontend
+#    ports:
+#      - "3000:80"
+#    depends_on:
+#      - backend
+#    restart: always

@@ -16,7 +16,7 @@ abstract class Pessoa {
 		this.dataNasc = dataNasc;
 	}
 
-	private String getNome() {
+	public String getNome() {
 		return nome;
 	}
 
