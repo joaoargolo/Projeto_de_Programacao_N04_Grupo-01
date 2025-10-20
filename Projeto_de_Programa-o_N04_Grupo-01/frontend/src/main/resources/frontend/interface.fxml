@@ -14,7 +14,7 @@
    xmlns="http://javafx.com/javafx/25"
    xmlns:fx="http://javafx.com/fxml/1" fx:controller="frontend.Controller">
    <children>
-      <VBox alignment="CENTER" fillWidth="false" layoutX="201.0" layoutY="66.0" prefHeight="401.0" prefWidth="406.0" spacing="25.0" style="-fx-background-color: white; -fx-background-radius: 8px; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.25), 10, 0.5, 2, 2);">
+      <VBox alignment="CENTER" fillWidth="false" fx:id="Vbox" layoutX="201.0" layoutY="66.0" prefHeight="401.0" prefWidth="406.0" spacing="25.0" style="-fx-background-color: white; -fx-background-radius: 8px; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.25), 10, 0.5, 2, 2);">
          <children>
             <Label alignment="CENTER" prefHeight="29.0" prefWidth="192.0" text="Criar nova conta">
                <font>
@@ -22,22 +22,22 @@
                </font>
             </Label>
             <Line endX="143.0" endY="111.5" opacity="0.5" startX="-261.5" startY="111.5" strokeWidth="0.5" />
-            <TextField id="NameField" prefHeight="35.0" prefWidth="325.0" promptText="Nome">
+            <TextField fx:id="NameField" prefHeight="35.0" prefWidth="325.0" promptText="Nome">
                <font>
                   <Font name="Ebrima" size="15.0" />
                </font>
             </TextField>
-            <TextField id="EmailField" layoutX="10.0" layoutY="200.0" prefHeight="35.0" prefWidth="325.0" promptText="Email">
+            <TextField fx:id="EmailField" layoutX="10.0" layoutY="200.0" prefHeight="35.0" prefWidth="325.0" promptText="Email">
                <font>
                   <Font name="Ebrima" size="15.0" />
                </font>
             </TextField>
-            <TextField id="PasswordField" layoutX="10.0" layoutY="233.0" prefHeight="35.0" prefWidth="325.0" promptText="Senha">
+            <TextField fx:id="PasswordField" layoutX="10.0" layoutY="233.0" prefHeight="35.0" prefWidth="325.0" promptText="Senha">
                <font>
                   <Font name="Ebrima" size="15.0" />
                </font>
             </TextField>
-            <ChoiceBox id="ChoiceBox" prefHeight="35.0" prefWidth="325.0" />
+            <ChoiceBox fx:id="ChoiceBox" prefHeight="35.0" prefWidth="325.0" />
             <Button fx:id="SubmitButton" alignment="CENTER" mnemonicParsing="false" prefHeight="35.0" prefWidth="150.0" style="-fx-background-color: green;" text="Cadastrar-se" textFill="#f5f5f5" onAction="#onButtonClick">
                <font>
                   <Font name="System Bold" size="16.0" />
