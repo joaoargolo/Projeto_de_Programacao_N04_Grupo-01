@@ -1,23 +1,24 @@
 package br.com.unit.classes;
 
-public class Gerente extends Pessoa{
-    private long idGerente;
+import jakarta.persistence.*;
+import lombok.*;
 
-    protected Gerente(String nome, String cpf, String email, String senha, String dataNasc, long idGerente) {
-        super(nome, cpf, email, senha, dataNasc);
-        this.idGerente = idGerente;
-    }
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Entity
+@Table(name = "gerentes")
+public class Gerente extends Pessoa {
 
-    public long getIdGerente() {
-        return idGerente;
-    }
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer idGerente;
 
     public void cadastrarEvento() {
-        System.out.println("O evento foi cadastrado");
+        System.out.println("O evento foi cadastrado.");
     }
 
     public void removerEvento() {
         System.out.println("O evento foi removido.");
     }
-
 }

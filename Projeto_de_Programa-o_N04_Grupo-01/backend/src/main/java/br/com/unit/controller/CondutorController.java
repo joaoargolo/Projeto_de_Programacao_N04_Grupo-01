@@ -2,8 +2,10 @@ package br.com.unit.controller;
 
 import org.springframework.web.bind.annotation.*;
 import br.com.unit.classes.Condutor;
-
 import java.util.*;
+
+import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpStatus;
 
 //POST http://localhost:8080/condutores
 //{
@@ -28,14 +30,14 @@ public class CondutorController {
     }
 
     @PostMapping("/criar")
-    public String criarCondutor(@RequestBody Condutor condutor) {
+    public ResponseEntity<String> criarCondutor(@RequestBody Condutor condutor) {
         condutores.add(condutor);
-        return "Condutor cadastrado com sucesso: " + condutor.getIdCondutor();
+        return ResponseEntity.status(HttpStatus.CREATED).body("Condutor cadastrado com sucesso: " + condutor.getIdCondutor());
     }
 
     @DeleteMapping("/deletar/{id}")
-    public String removerCondutor(@PathVariable long id) {
+    public ResponseEntity<String> removerCondutor(@PathVariable int id) {
         condutores.removeIf(c -> c.getIdCondutor() == id);
-        return "Condutor com ID " + id + " removido com sucesso!";
+        return ResponseEntity.ok("Condutor com ID " + id + " removido com sucesso!");
     }
 }

@@ -4,6 +4,9 @@ import org.springframework.web.bind.annotation.*;
 import br.com.unit.classes.*;
 import java.util.*;
 
+import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpStatus;
+
 //POST http://localhost:8080/eventos
 //{
 //  "nomeEvento": "Workshop Java",
@@ -25,14 +28,14 @@ public class EventoController {
     }
 
     @PostMapping("/criar")
-    public String criarEvento(@RequestBody EventoParticipado evento) {
+    public ResponseEntity<String> criarEvento(@RequestBody EventoParticipado evento) {
         eventos.add(evento);
-        return "Evento cadastrado com sucesso: " + evento.getNomeEvento();
+        return ResponseEntity.status(HttpStatus.CREATED).body("Evento cadastrado com sucesso: " + evento.getNomeEvento());
     }
 
     @DeleteMapping("/deletar/{id}")
-    public String removerEvento(@PathVariable long id) {
+    public ResponseEntity<String> removerEvento(@PathVariable int id) {
         eventos.removeIf(e -> e.getIdEvento() == id);
-        return "Evento com ID " + id + " removido com sucesso!";
+        return ResponseEntity.ok("Evento com ID " + id + " removido com sucesso!");
     }
 }

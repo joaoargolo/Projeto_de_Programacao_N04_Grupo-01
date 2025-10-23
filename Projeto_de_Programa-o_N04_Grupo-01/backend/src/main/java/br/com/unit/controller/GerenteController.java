@@ -4,6 +4,9 @@ import org.springframework.web.bind.annotation.*;
 import br.com.unit.classes.Gerente;
 import java.util.*;
 
+import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpStatus;
+
 //POST http://localhost:8080/gerentes
 //{
 //  "nome": "Alan Rocha",
@@ -20,9 +23,9 @@ public class GerenteController {
     private List<Gerente> gerentes = new ArrayList<>();
 
     @PostMapping("/criar")
-    public String cadastrarGerente(@RequestBody Gerente g) {
+    public ResponseEntity<String> cadastrarGerente(@RequestBody Gerente g) {
         gerentes.add(g);
-        return "Gerente cadastrado: " + g.getNome();
+        return ResponseEntity.status(HttpStatus.CREATED).body("Gerente cadastrado com sucesso: " + g.getIdGerente());
     }
 
     @GetMapping("/listar")
@@ -31,8 +34,8 @@ public class GerenteController {
     }
 
     @DeleteMapping("/deletar/{id}")
-    public String removerGerente(@PathVariable long id){
+    public ResponseEntity<String> removerGerente(@PathVariable int id){
         gerentes.removeIf(e -> e.getIdGerente() == id);
-        return "Gerente com o id " + id + " foi removido com sucesso!";
+        return ResponseEntity.ok("Gerente com o id " + id + " foi removido com sucesso!");
     }
 }

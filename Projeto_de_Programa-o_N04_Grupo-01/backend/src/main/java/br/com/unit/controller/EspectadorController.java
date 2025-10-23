@@ -4,6 +4,9 @@ import org.springframework.web.bind.annotation.*;
 import br.com.unit.classes.Espectador;
 import java.util.*;
 
+import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpStatus;
+
 //POST http://localhost:8080/espectadores
 //{
 //  "nome": "Ana",
@@ -25,14 +28,14 @@ public class EspectadorController {
     }
 
     @PostMapping("/criar")
-    public String criarEspectador(@RequestBody Espectador espectador) {
+    public ResponseEntity<String> criarEspectador(@RequestBody Espectador espectador) {
         espectadores.add(espectador);
-        return "Espectador cadastrado com sucesso: " + espectador.getIdEspectador();
+        return ResponseEntity.status(HttpStatus.CREATED).body("Espectador cadastrado com sucesso: " + espectador.getIdEspectador());
     }
 
     @DeleteMapping("/deletar/{id}")
-    public String removerEspectador(@PathVariable long id) {
+    public ResponseEntity<String> removerEspectador(@PathVariable int id) {
         espectadores.removeIf(e -> e.getIdEspectador() == id);
-        return "Espectador com ID " + id + " removido com sucesso!";
+        return ResponseEntity.ok("Espectador com ID " + id + " removido com sucesso!");
     }
 }
