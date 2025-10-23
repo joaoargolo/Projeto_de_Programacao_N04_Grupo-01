@@ -1,7 +1,7 @@
 package br.com.unit.controller;
 
 import org.springframework.web.bind.annotation.*;
-import br.com.unit.classes.Espectador;
+import br.com.unit.classes.Staff;
 import java.util.*;
 
 //POST http://localhost:8080/staff
@@ -21,16 +21,16 @@ public class StaffController {
 
     private List<Staff> staff = new ArrayList<>();
 
-    @GetMapping("/staff/listar")
+    @GetMapping("/listar")
     public List<Staff> listarStaff() { return staff; }
 
-    @PostMapping("/staff/criar")
+    @PostMapping("/criar")
     public String criarStaff(@RequestBody Staff staff1){
         staff.add(staff1);
         return "Membro do staff cadastrado com sucesso: " + staff1.getIdStaff();
     }
 
-    @Deletemapping("/staff/deletar/{id}")
+    @DeleteMapping("/deletar/{id}")
     public String removerStaff(@PathVariable long id){
         staff.removeIf(e -> e.getIdStaff() == id);
         return "Membro do staff com ID " + id + " removido com sucesso!";

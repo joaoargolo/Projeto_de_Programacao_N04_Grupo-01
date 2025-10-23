@@ -19,18 +19,18 @@ public class EspectadorController {
 
     private List<Espectador> espectadores = new ArrayList<>();
 
-    @GetMapping("/espectadores/listar")
+    @GetMapping("/listar")
     public List<Espectador> listarEspectadores() {
         return espectadores;
     }
 
-    @PostMapping("/espectadores/criar")
+    @PostMapping("/criar")
     public String criarEspectador(@RequestBody Espectador espectador) {
         espectadores.add(espectador);
         return "Espectador cadastrado com sucesso: " + espectador.getIdEspectador();
     }
 
-    @DeleteMapping("/espectadores/deletar/{id}")
+    @DeleteMapping("/deletar/{id}")
     public String removerEspectador(@PathVariable long id) {
         espectadores.removeIf(e -> e.getIdEspectador() == id);
         return "Espectador com ID " + id + " removido com sucesso!";

@@ -22,18 +22,18 @@ public class CondutorController {
 
     private List<Condutor> condutores = new ArrayList<>();
 
-    @GetMapping("/condutores/listar")
+    @GetMapping("/listar")
     public List<Condutor> listarCondutores() {
         return condutores;
     }
 
-    @PostMapping("/condutores/criar")
+    @PostMapping("/criar")
     public String criarCondutor(@RequestBody Condutor condutor) {
         condutores.add(condutor);
         return "Condutor cadastrado com sucesso: " + condutor.getIdCondutor();
     }
 
-    @DeleteMapping("/condutores/deletar/{id}")
+    @DeleteMapping("/deletar/{id}")
     public String removerCondutor(@PathVariable long id) {
         condutores.removeIf(c -> c.getIdCondutor() == id);
         return "Condutor com ID " + id + " removido com sucesso!";

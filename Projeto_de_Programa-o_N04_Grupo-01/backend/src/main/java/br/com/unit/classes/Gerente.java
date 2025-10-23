@@ -8,7 +8,7 @@ public class Gerente extends Pessoa{
         this.idGerente = idGerente;
     }
 
-    private long getIdGerente() {
+    public long getIdGerente() {
         return idGerente;
     }
 

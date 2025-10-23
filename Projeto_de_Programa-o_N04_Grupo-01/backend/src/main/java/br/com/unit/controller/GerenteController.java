@@ -19,18 +19,18 @@ public class GerenteController {
 
     private List<Gerente> gerentes = new ArrayList<>();
 
-    @PostMapping("/gerentes/criar")
+    @PostMapping("/criar")
     public String cadastrarGerente(@RequestBody Gerente g) {
         gerentes.add(g);
         return "Gerente cadastrado: " + g.getNome();
     }
 
-    @GetMapping("/gerentes/listar")
+    @GetMapping("/listar")
     public List<Gerente> listarGerentes() {
         return gerentes;
     }
 
-    @DeleteMapping("/gerentes/deletar/{id}")
+    @DeleteMapping("/deletar/{id}")
     public String removerGerente(@PathVariable long id){
         gerentes.removeIf(e -> e.getIdGerente() == id);
         return "Gerente com o id " + id + " foi removido com sucesso!";

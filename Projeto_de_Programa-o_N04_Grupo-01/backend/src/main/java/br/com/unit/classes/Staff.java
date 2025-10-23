@@ -13,19 +13,19 @@ public class Staff extends Pessoa{
 		this.eventoAuxiliado = eventoAuxiliado;
 	}
 
-	private long getIdStaff() {
+	public long getIdStaff() {
 		return idStaff;
 	}
 
-	private String getEspecializacao() {
+	public String getEspecializacao() {
 		return especializacao;
 	}
 
-	private String getEventoAuxiliado() {
+	public String getEventoAuxiliado() {
 		return eventoAuxiliado;
 	}
 
-	private void setEventoAuxiliado(String eventoAuxiliado) {
+	public void setEventoAuxiliado(String eventoAuxiliado) {
 		this.eventoAuxiliado = eventoAuxiliado;
 	}
 	

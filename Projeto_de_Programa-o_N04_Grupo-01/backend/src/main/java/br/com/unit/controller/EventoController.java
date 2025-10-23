@@ -19,18 +19,18 @@ public class EventoController {
 
     private List<EventoParticipado> eventos = new ArrayList<>();
 
-    @GetMapping("/eventos/listar")
+    @GetMapping("/listar")
     public List<EventoParticipado> listarEventos() {
         return eventos;
     }
 
-    @PostMapping("/eventos/criar")
+    @PostMapping("/criar")
     public String criarEvento(@RequestBody EventoParticipado evento) {
         eventos.add(evento);
         return "Evento cadastrado com sucesso: " + evento.getNomeEvento();
     }
 
-    @DeleteMapping("/eventos/deletar/{id}")
+    @DeleteMapping("/deletar/{id}")
     public String removerEvento(@PathVariable long id) {
         eventos.removeIf(e -> e.getIdEvento() == id);
         return "Evento com ID " + id + " removido com sucesso!";
