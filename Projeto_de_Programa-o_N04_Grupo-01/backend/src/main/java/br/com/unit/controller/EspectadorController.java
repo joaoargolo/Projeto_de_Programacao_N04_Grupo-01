@@ -1,7 +1,9 @@
 package br.com.unit.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import br.com.unit.classes.Espectador;
+import br.com.unit.service.EspectadorService;
 import java.util.*;
 
 import org.springframework.http.ResponseEntity;
@@ -20,22 +22,37 @@ import org.springframework.http.HttpStatus;
 @RequestMapping("/espectadores")
 public class EspectadorController {
 
+    @Autowired
+    private EspectadorService espectadorService;
+
     private List<Espectador> espectadores = new ArrayList<>();
 
     @GetMapping("/listar")
-    public List<Espectador> listarEspectadores() {
-        return espectadores;
+    public Collection<Espectador> listarEspectadores() {
+        return espectadorService.getEspectador();
     }
 
     @PostMapping("/criar")
     public ResponseEntity<String> criarEspectador(@RequestBody Espectador espectador) {
-        espectadores.add(espectador);
-        return ResponseEntity.status(HttpStatus.CREATED).body("Espectador cadastrado com sucesso: " + espectador.getIdEspectador());
+
+        try {
+            espectadorService.createEspectador(espectador);
+            return ResponseEntity.status(HttpStatus.CREATED).body("Espectador cadastrado com sucesso: " + espectador.getIdEspectador());
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
+    }
+
+    @PutMapping("atualizar/{id}")
+    public ResponseEntity<Object> atualizarEspectador(@PathVariable int id, @RequestBody Espectador espectador) {
+
+        espectadorService.updateEspectador(id, espectador);
+        return ResponseEntity.ok("Espectador com o id:" + id + "atualizado com sucesso!!");
     }
 
     @DeleteMapping("/deletar/{id}")
     public ResponseEntity<String> removerEspectador(@PathVariable int id) {
-        espectadores.removeIf(e -> e.getIdEspectador() == id);
+        espectadorService.deleteEspectador(id);
         return ResponseEntity.ok("Espectador com ID " + id + " removido com sucesso!");
     }
 }
