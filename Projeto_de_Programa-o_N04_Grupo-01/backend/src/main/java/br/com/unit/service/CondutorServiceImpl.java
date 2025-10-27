@@ -40,4 +40,9 @@ public class CondutorServiceImpl implements CondutorService {
     public Collection<Condutor> getCondutor() {
         return condutorRepo.values();
     }
+
+    @Override
+    public void setId(int id, Condutor condutor) {
+        condutor.setIdCondutor(id);
+    }
 }
