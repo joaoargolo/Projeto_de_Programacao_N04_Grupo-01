@@ -8,7 +8,7 @@ import lombok.*;
 @AllArgsConstructor
 @Entity
 @Table(name = "espectadores")
-public class Condutor extends Pessoa {
+public class Espectador extends Pessoa {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
