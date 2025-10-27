@@ -33,8 +33,10 @@ public class RecuperaSenhaController {
         String email = RecuperaEmailField.getText();
         if (email.isEmpty()) {
             EmailErrorLabel.setText("Por favor, insira um email.");
-        } else {
+        } else if (!Validador.validarEmail(email)) {
 
+            EmailErrorLabel.setText("Formatação errada de email. deve ser ex: teste@teste.com");
+        } else {
             System.out.println("Email de recuperação enviado para: " + email);
             EmailErrorLabel.setText("Email de recuperação enviado!");
         }

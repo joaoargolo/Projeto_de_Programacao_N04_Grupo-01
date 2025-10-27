@@ -1,6 +1,7 @@
 package frontend;
 
 import java.util.List;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 import javafx.fxml.FXML;
@@ -29,6 +30,9 @@ public class Controller {
     private TextField EmailLoginField;
 
     @FXML
+    private TextField SenhaLoginField;
+
+    @FXML
     private TextField EmailCadastroField;
 
     @FXML
@@ -43,13 +47,16 @@ public class Controller {
     @FXML
     private DatePicker DataNascField;
 
+    ArrayList<String> listCadastroFields = new ArrayList<>();
+
     @FXML
     public void initialize() {
-        ArrayList<String> list = new ArrayList<>();
-        list.add("Teste1");
-        list.add("Teste2");
+        ArrayList<String> listaFuncoes = new ArrayList<>();
 
-        FuncaoCadastroField.setItems(FXCollections.observableArrayList(list));
+        listaFuncoes.add("Teste1");
+        listaFuncoes.add("Teste2");
+
+        FuncaoCadastroField.setItems(FXCollections.observableArrayList(listaFuncoes));
     }
 
     private void LimparFields() {
@@ -73,27 +80,58 @@ public class Controller {
 
     @FXML
     protected void CadastroClick() {
+
+        listCadastroFields.clear();
+
         String nome = NomeCadastroField.getText();
-        String email = EmailCadastroField.getText();
-        String password = SenhaCadastroField.getText();
-        String cpf = CpfField.getText();
-        String funcao = FuncaoCadastroField.getValue();
+        listCadastroFields.add(NomeCadastroField.getText());
+        listCadastroFields.add(EmailCadastroField.getText());
+        listCadastroFields.add(SenhaCadastroField.getText());
+        listCadastroFields.add(CpfField.getText());
+        listCadastroFields.add(FuncaoCadastroField.getValue());
+        listCadastroFields.add(
+                (DataNascField.getValue() != null) ? DataNascField.getValue().toString() : "");
+
         System.out.println("Botão clicado!");
         System.out.println(nome.length());
-        if (nome.length() < 12) {
-            System.out.println("O tamanho do nome é muito pequeno!");
-            NomeCadastroField.setText("Valor inválido! , o nome deve ser maior que 12 caracteres");
-            NomeCadastroField.setStyle("-fx-border-color : red");
-        } else {
-            IrParaLogin();
+
+        for (String Campo : listCadastroFields) {
+            if (Campo == null || Campo.isEmpty()) {
+                System.out.println("Campo vazio detectado!");
+                NomeCadastroField.setText("Valor inválido! , nenhum campo pode estar vazio");
+                NomeCadastroField.setStyle("-fx-border-color : red");
+                return;
+            }
         }
+        if (!Validador.validarEmail(EmailCadastroField.getText())) {
+            EmailCadastroField.setText("Email inválido!");
+            EmailCadastroField.setStyle("-fx-border-color : red");
+            return;
+        } else if (!Validador.validarSenha(SenhaCadastroField.getText())) {
+            SenhaCadastroField.setText("Senha inválida!");
+            SenhaCadastroField.setStyle("-fx-border-color : red");
+            return;
+        } else if (!Validador.validarCPF(CpfField.getText())) {
+            CpfField.setText("CPF inválido!");
+            CpfField.setStyle("-fx-border-color : red");
+            return;
+        }
+
+        System.out.println("Todos os campos preenchidos!");
+        IrParaLogin();
         LimparFields();
     }
 
     @FXML
     protected void EntrarClick() {
         String email = EmailLoginField.getText();
+        String senha = SenhaLoginField.getText();
+        if (email.isEmpty() || senha.isEmpty()) {
+            System.out.println("Por favor, preencha todos os campos.");
+            return;
+        }
         System.out.println("Botão de login clicado!");
         EmailLoginField.clear();
+        SenhaLoginField.clear();
     }
 }

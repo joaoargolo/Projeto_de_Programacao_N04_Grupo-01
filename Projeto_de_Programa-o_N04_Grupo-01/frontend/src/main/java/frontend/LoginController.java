@@ -41,6 +41,17 @@ public class LoginController {
         String email = EmailLoginField.getText();
         String senha = SenhaLoginField.getText();
 
+        if (email.isEmpty()) {
+            EmailErrorLabel.setText("Por favor, insira um email.");
+
+        } else if (!Validador.validarEmail(email)) {
+            EmailErrorLabel.setText("Formatação errada de email. deve ser ex: teste@teste.com");
+        }
+        if (senha.isEmpty()) {
+            SenhaErrorLabel.setText("Por favor, insira uma senha.");
+        } else {
+            SenhaErrorLabel.setText("");
+        }
         EmailLoginField.clear();
         SenhaLoginField.clear();
     }
