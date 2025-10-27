@@ -1,8 +1,13 @@
 package br.com.unit.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import br.com.unit.classes.Espectador;
+import br.com.unit.service.EspectadorService;
 import java.util.*;
+
+import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpStatus;
 
 //POST http://localhost:8080/espectadores
 //{
@@ -11,29 +16,43 @@ import java.util.*;
 //  "email": "ana@example.com",
 //  "senha": "1234",
 //  "dataNasc": "2001-07-10",
-//  "idEspectador": 3
 //}
 
 @RestController
 @RequestMapping("/espectadores")
 public class EspectadorController {
 
+    @Autowired
+    private EspectadorService espectadorService;
+
     private List<Espectador> espectadores = new ArrayList<>();
 
-    @GetMapping
-    public List<Espectador> listarEspectadores() {
-        return espectadores;
+    @GetMapping("/listar")
+    public Collection<Espectador> listarEspectadores() {
+        return espectadorService.getEspectador();
     }
 
-    @PostMapping
-    public String criarEspectador(@RequestBody Espectador espectador) {
-        espectadores.add(espectador);
-        return "Espectador cadastrado com sucesso: " + espectador.getIdEspectador();
+    @PostMapping("/criar")
+    public ResponseEntity<String> criarEspectador(@RequestBody Espectador espectador) {
+
+        try {
+            espectadorService.createEspectador(espectador);
+            return ResponseEntity.status(HttpStatus.CREATED).body("Espectador cadastrado com sucesso: " + espectador.getIdEspectador());
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
     }
 
-    @DeleteMapping("/{id}")
-    public String removerEspectador(@PathVariable int id) {
-        espectadores.removeIf(e -> e.getIdEspectador() == id);
-        return "Espectador com ID " + id + " removido com sucesso!";
+    @PutMapping("atualizar/{id}")
+    public ResponseEntity<Object> atualizarEspectador(@PathVariable int id, @RequestBody Espectador espectador) {
+
+        espectadorService.updateEspectador(id, espectador);
+        return ResponseEntity.ok("Espectador com o id:" + id + "atualizado com sucesso!!");
+    }
+
+    @DeleteMapping("/deletar/{id}")
+    public ResponseEntity<String> removerEspectador(@PathVariable int id) {
+        espectadorService.deleteEspectador(id);
+        return ResponseEntity.ok("Espectador com ID " + id + " removido com sucesso!");
     }
 }

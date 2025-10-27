@@ -1,9 +1,13 @@
 package br.com.unit.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import br.com.unit.classes.Condutor;
-
+import br.com.unit.service.CondutorService;
 import java.util.*;
+
+import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpStatus;
 
 //POST http://localhost:8080/condutores
 //{
@@ -12,7 +16,6 @@ import java.util.*;
 //  "email": "joao@example.com",
 //  "senha": "1234",
 //  "dataNasc": "1990-05-10",
-//  "idCondutor": 1,
 //  "eventoConduzido": "Workshop Spring Boot"
 //}
 
@@ -21,22 +24,37 @@ import java.util.*;
 @RequestMapping("/condutores")
 public class CondutorController {
 
+    @Autowired
+    private CondutorService condutorService;
+
     private List<Condutor> condutores = new ArrayList<>();
 
-    @GetMapping
-    public List<Condutor> listarCondutores() {
-        return condutores;
+    @GetMapping("/listar")
+    public Collection<Condutor> listarCondutores() {
+        return condutorService.getCondutor();
     }
 
-    @PostMapping
-    public String criarCondutor(@RequestBody Condutor condutor) {
-        condutores.add(condutor);
-        return "Condutor cadastrado com sucesso: " + condutor.getIdCondutor();
+    @PostMapping("/criar")
+    public ResponseEntity<String> criarCondutor(@RequestBody Condutor condutor) {
+
+        try {
+            condutorService.createCondutor(condutor);
+            return ResponseEntity.status(HttpStatus.CREATED).body("Condutor cadastrado com sucesso: " + condutor.getIdCondutor());
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
     }
 
-    @DeleteMapping("/{id}")
-    public String removerCondutor(@PathVariable int id) {
-        condutores.removeIf(c -> c.getIdCondutor() == id);
-        return "Condutor com ID " + id + " removido com sucesso!";
+    @PutMapping("atualizar/{id}")
+    public ResponseEntity<Object> atualizarCondutor(@PathVariable int id, @RequestBody Condutor condutor) {
+
+        condutorService.updateCondutor(id, condutor);
+        return ResponseEntity.ok("Condutor com o id:" + id + "atualizado com sucesso!!");
+    }
+
+    @DeleteMapping("/deletar/{id}")
+    public ResponseEntity<String> removerCondutor(@PathVariable int id) {
+        condutorService.deleteCondutor(id);
+        return ResponseEntity.ok("Condutor com ID " + id + " removido com sucesso!");
     }
 }
