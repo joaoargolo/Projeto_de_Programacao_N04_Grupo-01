@@ -4,10 +4,9 @@ import jakarta.persistence.*;
 import lombok.*;
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "evento_administrado")
+@DiscriminatorValue("ADMINISTRADO")
 public class EventoAdministrado extends Evento{
 
     @Id 

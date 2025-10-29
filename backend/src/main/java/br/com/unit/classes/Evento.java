@@ -6,11 +6,18 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
-@MappedSuperclass
+@AllArgsConstructor
+@Entity
+@Table(name = "evento")
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "tipo_evento", discriminatorType = DiscriminatorType.STRING)
+
 public abstract class Evento {
-    protected int idEvento;
+    
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer idEvento;
     public String nomeEvento;
     public String descricaoEvento;
     public String dataInicio;
