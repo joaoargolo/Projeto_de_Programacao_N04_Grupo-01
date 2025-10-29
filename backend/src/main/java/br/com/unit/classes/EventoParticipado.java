@@ -7,6 +7,7 @@ import lombok.*;
 @NoArgsConstructor
 @Entity
 @DiscriminatorValue("PARTICIPADO")
+@EqualsAndHashCode(callSuper = true)
 public class EventoParticipado extends Evento{
     
     @Override

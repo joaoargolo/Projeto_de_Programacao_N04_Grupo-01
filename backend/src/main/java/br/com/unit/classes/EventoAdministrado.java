@@ -7,6 +7,7 @@ import lombok.*;
 @NoArgsConstructor
 @Entity
 @DiscriminatorValue("ADMINISTRADO")
+@EqualsAndHashCode(callSuper = true)
 public class EventoAdministrado extends Evento{
 
     @Id 

@@ -1,43 +1,48 @@
 package br.com.unit.service;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-
-import org.springframework.stereotype.Service;
 import br.com.unit.classes.Gerente;
+import br.com.unit.repository.GerenteRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.Collection;
+import java.util.List;
 
 @Service
 public class GerenteServiceImpl implements GerenteService {
 
-    private static Map<Integer, Gerente> gerenteRepo = new HashMap<>();
+    @Autowired
+    private GerenteRepository gerenteRepository;
 
     @Override
-    public void createGerente(Gerente gerente){
-        boolean jaExiste = gerenteRepo.values().stream()
-                .anyMatch(s -> s.getEmail().equalsIgnoreCase(gerente.getEmail()) || s.getCpf().equals(gerente.getCpf()));
+    public void createGerente(Gerente gerente) {
+        boolean jaExiste = gerenteRepository.existsByEmailOrCpf(gerente.getEmail(), gerente.getCpf());
 
-        if (jaExiste){
+        if (jaExiste) {
             throw new IllegalArgumentException("Já existe um gerente com este e-mail ou CPF!");
         }
 
-        gerenteRepo.put(gerente.getIdGerente(), gerente);
+        gerenteRepository.save(gerente);
     }
 
     @Override
     public void updateGerente(int id, Gerente gerente) {
-        gerenteRepo.remove(id);
+        if (!gerenteRepository.existsById(id)) {
+            throw new IllegalArgumentException("Gerente com ID " + id + " não encontrado!");
+        }
+
         gerente.setIdGerente(id);
-        gerenteRepo.put(id, gerente);
+        gerenteRepository.save(gerente);
     }
 
     @Override
     public void deleteGerente(int id) {
-        gerenteRepo.remove(id);
+        gerenteRepository.deleteById(id);
     }
 
     @Override
     public Collection<Gerente> getGerente() {
-        return gerenteRepo.values();
+        List<Gerente> gerentes = gerenteRepository.findAll();
+        return gerentes;
     }
 }

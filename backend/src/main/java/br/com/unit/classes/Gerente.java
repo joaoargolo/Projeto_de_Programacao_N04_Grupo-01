@@ -8,6 +8,7 @@ import lombok.*;
 @AllArgsConstructor
 @Entity
 @Table(name = "gerentes")
+@EqualsAndHashCode(callSuper = true)
 public class Gerente extends Pessoa {
 
     @Id

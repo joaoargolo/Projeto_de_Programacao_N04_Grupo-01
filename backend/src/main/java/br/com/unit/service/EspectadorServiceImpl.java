@@ -2,42 +2,47 @@ package br.com.unit.service;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+import br.com.unit.repository.EspectadorRepository;
 import org.springframework.stereotype.Service;
 import br.com.unit.classes.Espectador;
 
 @Service
 public class EspectadorServiceImpl implements EspectadorService {
 
-    private static Map<Integer, Espectador> espectadorRepo = new HashMap<>();
+    private EspectadorRepository espectadorRepository;
 
     @Override
     public void createEspectador(Espectador espectador){
-        boolean jaExiste = espectadorRepo.values().stream()
-                .anyMatch(s -> s.getEmail().equalsIgnoreCase(espectador.getEmail()) || s.getCpf().equals(espectador.getCpf()));
+        boolean jaExiste = espectadorRepository.existsByEmailOrCpf(espectador.getEmail(), espectador.getCpf());
 
         if (jaExiste){
             throw new IllegalArgumentException("Já existe um espectador com este e-mail ou CPF!");
         }
 
-        espectadorRepo.put(espectador.getIdEspectador(), espectador);
+        espectadorRepository.save(espectador);
     }
 
     @Override
     public void updateEspectador(int id, Espectador espectador) {
-        espectadorRepo.remove(id);
+        if (!espectadorRepository.existsById(id)) {
+            throw new IllegalArgumentException("Espectador com ID " + id + " não encontrado!");
+        }
+
         espectador.setIdEspectador(id);
-        espectadorRepo.put(id, espectador);
+        espectadorRepository.save(espectador);
     }
 
     @Override
     public void deleteEspectador(int id) {
-        espectadorRepo.remove(id);
+        espectadorRepository.deleteById(id);
     }
 
     @Override
     public Collection<Espectador> getEspectador() {
-        return espectadorRepo.values();
+        List<Espectador> espectadores = espectadorRepository.findAll();
+        return espectadores;
     }
 }
