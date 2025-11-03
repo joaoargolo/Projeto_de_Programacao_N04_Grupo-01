@@ -17,7 +17,7 @@ import java.util.*;
 //  "email": "luiz@example.com",
 //  "senha": "1234",
 //  "dataNasc": "2005-03-12",
-//  "especializacao": "mixagem"
+//  "especializacao": "mixagem",
 //  "eventoAuxiliado": "Taylor_Swift:_The_Eras_Tour"
 //}
 

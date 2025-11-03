@@ -27,8 +27,6 @@ public class CondutorController {
     @Autowired
     private CondutorService condutorService;
 
-    int id = 0;
-
     private List<Condutor> condutores = new ArrayList<>();
 
     @GetMapping("/listar")
@@ -40,8 +38,6 @@ public class CondutorController {
     public ResponseEntity<String> criarCondutor(@RequestBody Condutor condutor) {
         try {
             condutorService.createCondutor(condutor);
-            id++;
-            condutorService.setId(id, condutor);
             return ResponseEntity.status(HttpStatus.CREATED).body("Condutor cadastrado com sucesso: " + condutor.getIdCondutor());
 
         } catch (IllegalArgumentException e) {

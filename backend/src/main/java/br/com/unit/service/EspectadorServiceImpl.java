@@ -8,10 +8,12 @@ import java.util.Map;
 import br.com.unit.repository.EspectadorRepository;
 import org.springframework.stereotype.Service;
 import br.com.unit.classes.Espectador;
+import org.springframework.beans.factory.annotation.Autowired;
 
 @Service
 public class EspectadorServiceImpl implements EspectadorService {
 
+    @Autowired
     private EspectadorRepository espectadorRepository;
 
     @Override
