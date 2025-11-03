@@ -1,4 +1,4 @@
-package main.java.br.com.unit.dto;
+package br.com.unit.dto;
 
 public record EspectadorDTO(int idEspectador, String Nome, String cpf, String email, String senha, String dataNasc ) {
     

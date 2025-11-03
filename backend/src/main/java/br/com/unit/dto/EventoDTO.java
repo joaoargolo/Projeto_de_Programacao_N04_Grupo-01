@@ -1,4 +1,4 @@
-package main.java.br.com.unit.dto;
+package br.com.unit.dto;
 
 public record EventoDTO(int idEvento, String nomeEvento,String descricaoEvento, String dataInicio, String dataFim, int capacidade) {
 

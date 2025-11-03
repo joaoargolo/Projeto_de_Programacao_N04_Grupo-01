@@ -2,43 +2,51 @@ package br.com.unit.service;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+import br.com.unit.repository.CondutorRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import br.com.unit.classes.Condutor;
 
 @Service
 public class CondutorServiceImpl implements CondutorService {
 
-    private static Map<Integer, Condutor> condutorRepo = new HashMap<>();
+    @Autowired
+    private CondutorRepository condutorRepository;
+
 
     @Override
     public void createCondutor(Condutor condutor){
-        boolean jaExiste = condutorRepo.values().stream()
-                .anyMatch(s -> s.getEmail().equalsIgnoreCase(condutor.getEmail()) || s.getCpf().equals(condutor.getCpf()));
+        boolean jaExiste = condutorRepository.existsByEmailOrCpf(condutor.getEmail(), condutor.getCpf());
 
         if (jaExiste){
             throw new IllegalArgumentException("Já existe um condutor com este e-mail ou CPF!");
         }
 
-        condutorRepo.put(condutor.getIdCondutor(), condutor);
+        condutorRepository.save(condutor);
     }
 
     @Override
     public void updateCondutor(int id, Condutor condutor) {
-        condutorRepo.remove(id);
+        if (!condutorRepository.existsById(id)) {
+            throw new IllegalArgumentException("Condutor com ID " + id + " não encontrado!");
+        }
+
         condutor.setIdCondutor(id);
-        condutorRepo.put(id, condutor);
+        condutorRepository.save(condutor);
     }
 
     @Override
     public void deleteCondutor(int id) {
-        condutorRepo.remove(id);
+        condutorRepository.deleteById(id);
     }
 
     @Override
     public Collection<Condutor> getCondutor() {
-        return condutorRepo.values();
+        List<Condutor> condutores = condutorRepository.findAll();
+        return condutores;
     }
 
     @Override

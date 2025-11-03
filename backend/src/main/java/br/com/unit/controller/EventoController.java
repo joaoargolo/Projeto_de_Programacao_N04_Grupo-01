@@ -37,6 +37,8 @@ public class EventoController {
     public ResponseEntity<String> criarEvento(@RequestBody EventoParticipado evento) {
         eventos.add(evento);
         return ResponseEntity.status(HttpStatus.CREATED).body("Evento cadastrado com sucesso: " + evento.getNomeEvento());
+        //Adicionar para que o post salve no banco, no momento apenas confirma o post mas basicamente
+        //salva em lugar algum
     }
 
     @PutMapping("atualizar/{id}")

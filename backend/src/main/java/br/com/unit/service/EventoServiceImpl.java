@@ -1,35 +1,41 @@
 package br.com.unit.service;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-
-import org.springframework.stereotype.Service;
 import br.com.unit.classes.Evento;
+import br.com.unit.repository.EventoRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.Collection;
+import java.util.List;
 
 @Service
 public class EventoServiceImpl implements EventoService {
 
-    private static Map<Integer, Evento> eventoRepo = new HashMap<>();
+    @Autowired
+    private EventoRepository eventoRepository;
 
     @Override
-    public void createEvento(Evento evento){
-        eventoRepo.put(evento.getIdEvento(), evento);
+    public void createEvento(Evento evento) {
+        eventoRepository.save(evento);
     }
 
     @Override
     public void updateEvento(int id, Evento evento) {
-        eventoRepo.remove(id);
+        if (!eventoRepository.existsById(id)) {
+            throw new IllegalArgumentException("Evento com ID " + id + " não encontrado!");
+        }
         evento.setIdEvento(id);
-        eventoRepo.put(id, evento);
+        eventoRepository.save(evento);
     }
 
     @Override
-    public void deleteEvento(int id) {eventoRepo.remove(id);
+    public void deleteEvento(int id) {
+        eventoRepository.deleteById(id);
     }
 
     @Override
     public Collection<Evento> getEvento() {
-        return eventoRepo.values();
+        List<Evento> eventos = eventoRepository.findAll();
+        return eventos;
     }
 }

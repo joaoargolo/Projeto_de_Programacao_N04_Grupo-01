@@ -1,43 +1,48 @@
 package br.com.unit.service;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-
-import org.springframework.stereotype.Service;
 import br.com.unit.classes.Staff;
+import br.com.unit.repository.StaffRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.Collection;
+import java.util.List;
 
 @Service
 public class StaffServiceImpl implements StaffService {
 
-    private static Map<Integer, Staff> staffRepo = new HashMap<>();
+    @Autowired
+    private StaffRepository staffRepository;
 
     @Override
-    public void createStaff(Staff staff){
-        boolean jaExiste = staffRepo.values().stream()
-                        .anyMatch(s -> s.getEmail().equalsIgnoreCase(staff.getEmail()) || s.getCpf().equals(staff.getCpf()));
+    public void createStaff(Staff staff) {
+        boolean jaExiste = staffRepository.existsByEmailOrCpf(staff.getEmail(), staff.getCpf());
 
-        if (jaExiste){
-            throw new IllegalArgumentException("Já existe um membro do staff com este e-mail ou CPF!");
+        if (jaExiste) {
+            throw new IllegalArgumentException("Já existe um staff com este e-mail ou CPF!");
         }
 
-        staffRepo.put(staff.getIdStaff(), staff);
+        staffRepository.save(staff);
     }
 
     @Override
     public void updateStaff(int id, Staff staff) {
-        staffRepo.remove(id);
+        if (!staffRepository.existsById(id)) {
+            throw new IllegalArgumentException("Staff com ID " + id + " não encontrado!");
+        }
+
         staff.setIdStaff(id);
-        staffRepo.put(id, staff);
+        staffRepository.save(staff);
     }
 
     @Override
     public void deleteStaff(int id) {
-        staffRepo.remove(id);
+        staffRepository.deleteById(id);
     }
 
     @Override
     public Collection<Staff> getStaff() {
-        return staffRepo.values();
+        List<Staff> staffList = staffRepository.findAll();
+        return staffList;
     }
 }

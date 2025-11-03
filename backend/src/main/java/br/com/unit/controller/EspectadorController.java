@@ -34,7 +34,6 @@ public class EspectadorController {
 
     @PostMapping("/criar")
     public ResponseEntity<String> criarEspectador(@RequestBody Espectador espectador) {
-
         try {
             espectadorService.createEspectador(espectador);
             return ResponseEntity.status(HttpStatus.CREATED).body("Espectador cadastrado com sucesso: " + espectador.getIdEspectador());
