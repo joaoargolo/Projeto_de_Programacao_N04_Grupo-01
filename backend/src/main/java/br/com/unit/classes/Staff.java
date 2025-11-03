@@ -18,9 +18,9 @@ public class Staff extends Pessoa {
     @Column(nullable = false)
     private String especializacao;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private String eventoAuxiliado;
-
+    //
     public void atribuirEvento() {
         System.out.println("O seguinte evento foi atribuído: " + eventoAuxiliado);
     }
