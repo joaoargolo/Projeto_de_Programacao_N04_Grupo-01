@@ -9,11 +9,14 @@ import lombok.*;
 @Entity
 @Table(name = "condutores")
 @EqualsAndHashCode(callSuper = true)
+@IdClass(Condutor.class)
 public class Condutor extends Pessoa {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idCondutor;
+
+    @Id
+    private Integer idPessoa;
 
     @Column(nullable = false)
     private String eventoConduzido;

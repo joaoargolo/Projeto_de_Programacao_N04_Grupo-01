@@ -9,11 +9,14 @@ import lombok.*;
 @Entity
 @Table(name = "espectadores")
 @EqualsAndHashCode(callSuper = true)
+@IdClass(Espectador.class)
 public class Espectador extends Pessoa {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idEspectador;
+
+    @Id
+    private Integer idPessoa;
 
     public void cadastrarEvento() {
         System.out.println("O usuário foi cadastrado no evento.");
