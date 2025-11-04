@@ -26,17 +26,26 @@ public class StaffServiceImpl implements StaffService {
     }
 
     @Override
-    public void updateStaff(int id, Staff staff) {
-        if (!staffRepository.existsById(id)) {
-            throw new IllegalArgumentException("Staff com ID " + id + " não encontrado!");
-        }
+    public void updateStaff(int id, Staff staffAtualizado) {
+        Staff staffExistente = staffRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Staff com ID " + id + " não encontrado!"));
 
-        staff.setIdStaff(id);
-        staffRepository.save(staff);
+        staffExistente.setNome(staffAtualizado.getNome());
+        staffExistente.setEmail(staffAtualizado.getEmail());
+        staffExistente.setCpf(staffAtualizado.getCpf());
+        staffExistente.setSenha(staffAtualizado.getSenha());
+        staffExistente.setDataNasc(staffAtualizado.getDataNasc());
+        staffExistente.setTelefone(staffAtualizado.getTelefone());
+        staffExistente.setPerfil(staffAtualizado.getPerfil());
+        staffExistente.setEspecializacao(staffAtualizado.getEspecializacao());
+        staffRepository.save(staffExistente);
     }
 
     @Override
     public void deleteStaff(int id) {
+        if (!staffRepository.existsById(id)) {
+            throw new IllegalArgumentException("Staff com ID " + id + " não encontrado!");
+        }
+
         staffRepository.deleteById(id);
     }
 

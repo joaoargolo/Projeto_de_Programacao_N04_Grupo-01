@@ -46,14 +46,23 @@ public class StaffController {
 
     @PutMapping("atualizar/{id}")
     public ResponseEntity<Object> atualizarStaff(@PathVariable int id, @RequestBody Staff staff1) {
+        try {
+            staffService.updateStaff(id, staff1);
+            return ResponseEntity.ok("Membro do staff com o id:" + id + "atualizado com sucesso!!");
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
 
-        staffService.updateStaff(id, staff1);
-        return ResponseEntity.ok("Membro do staff com o id:" + id + "atualizado com sucesso!!");
     }
 
     @DeleteMapping("/deletar/{id}")
     public ResponseEntity<String> removerStaff(@PathVariable int id){
-        staffService.deleteStaff(id);
-        return ResponseEntity.ok("Membro do staff com ID " + id + " removido com sucesso!");
+
+        try {
+            staffService.deleteStaff(id);
+            return ResponseEntity.ok("Membro do staff com ID " + id + " removido com sucesso!");
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
     }
 }

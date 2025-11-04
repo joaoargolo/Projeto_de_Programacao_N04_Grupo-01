@@ -35,10 +35,12 @@ public class EventoController {
 
     @PostMapping("/criar")
     public ResponseEntity<String> criarEvento(@RequestBody EventoParticipado evento) {
-        eventos.add(evento);
-        return ResponseEntity.status(HttpStatus.CREATED).body("Evento cadastrado com sucesso: " + evento.getNomeEvento());
-        //Adicionar para que o post salve no banco, no momento apenas confirma o post mas basicamente
-        //salva em lugar algum
+        try {
+            eventoService.createEvento(evento);
+            return ResponseEntity.status(HttpStatus.CREATED).body("Evento cadastrado com sucesso: " + evento.getIdEvento());
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
     }
 
     @PutMapping("atualizar/{id}")

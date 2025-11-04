@@ -9,21 +9,19 @@ import lombok.*;
 @Entity
 @Table(name = "staffs")
 @EqualsAndHashCode(callSuper = true)
-@IdClass(Staff.class)
+@PrimaryKeyJoinColumn(name = "idPessoa")
 public class Staff extends Pessoa {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idStaff;
-
-    @Id
-    private Integer idPessoa;
 
     @Column(nullable = false)
     private String especializacao;
 
     @Column(nullable = true)
     private String eventoAuxiliado;
-    
+
     public void atribuirEvento() {
         System.out.println("O seguinte evento foi atribuído: " + eventoAuxiliado);
     }

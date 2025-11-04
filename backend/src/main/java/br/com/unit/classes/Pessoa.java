@@ -14,6 +14,7 @@ import lombok.NoArgsConstructor;
 public abstract class Pessoa {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idPessoa;
 
     @Column(nullable = false)
