@@ -9,14 +9,10 @@ import lombok.*;
 @Entity
 @Table(name = "staffs")
 @EqualsAndHashCode(callSuper = true)
-@IdClass(Staff.class)
+@PrimaryKeyJoinColumn(name = "idPessoa")
 public class Staff extends Pessoa {
 
-    @Id
     private Integer idStaff;
-
-    @Id
-    private Integer idPessoa;
 
     @Column(nullable = false)
     private String especializacao;

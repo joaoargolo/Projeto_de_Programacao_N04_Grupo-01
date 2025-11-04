@@ -9,14 +9,10 @@ import lombok.*;
 @Entity
 @Table(name = "condutores")
 @EqualsAndHashCode(callSuper = true)
-@IdClass(Condutor.class)
+@PrimaryKeyJoinColumn(name = "idPessoa")
 public class Condutor extends Pessoa {
 
-    @Id
     private Integer idCondutor;
-
-    @Id
-    private Integer idPessoa;
 
     @Column(nullable = false)
     private String eventoConduzido;

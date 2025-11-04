@@ -9,14 +9,10 @@ import lombok.*;
 @Entity
 @Table(name = "gerentes")
 @EqualsAndHashCode(callSuper = true)
-@IdClass(Gerente.class)
+@PrimaryKeyJoinColumn(name = "idPessoa")
 public class Gerente extends Pessoa {
 
-    @Id
     private Integer idGerente;
-
-    @Id
-    private Integer idPessoa;
 
     public void cadastrarEvento() {
         System.out.println("O evento foi cadastrado.");
