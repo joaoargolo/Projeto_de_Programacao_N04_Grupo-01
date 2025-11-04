@@ -2,6 +2,7 @@ package br.com.unit.classes;
 
 import jakarta.persistence.*;
 import lombok.*;
+import br.com.unit.classes.id.StaffId;
 
 @Data
 @NoArgsConstructor
@@ -9,9 +10,11 @@ import lombok.*;
 @Entity
 @Table(name = "staffs")
 @EqualsAndHashCode(callSuper = true)
-@PrimaryKeyJoinColumn(name = "idPessoa")
+@IdClass(StaffId.class)
 public class Staff extends Pessoa {
 
+    @Id
+    @Column(name = "idStaff")
     private Integer idStaff;
 
     @Column(nullable = false)

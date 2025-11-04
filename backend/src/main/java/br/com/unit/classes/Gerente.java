@@ -2,6 +2,7 @@ package br.com.unit.classes;
 
 import jakarta.persistence.*;
 import lombok.*;
+import br.com.unit.classes.id.GerenteId;
 
 @Data
 @NoArgsConstructor
@@ -9,9 +10,11 @@ import lombok.*;
 @Entity
 @Table(name = "gerentes")
 @EqualsAndHashCode(callSuper = true)
-@PrimaryKeyJoinColumn(name = "idPessoa")
+@IdClass(GerenteId.class)
 public class Gerente extends Pessoa {
 
+    @Id
+    @Column(name = "idGerente")
     private Integer idGerente;
 
     public void cadastrarEvento() {

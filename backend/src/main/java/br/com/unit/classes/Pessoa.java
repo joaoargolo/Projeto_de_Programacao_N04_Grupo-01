@@ -15,6 +15,7 @@ public abstract class Pessoa {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "idPessoa")
     private Integer idPessoa;
 
     @Column(nullable = false)
