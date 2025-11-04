@@ -2,7 +2,6 @@ package br.com.unit.classes;
 
 import jakarta.persistence.*;
 import lombok.*;
-import br.com.unit.classes.id.CondutorId;
 
 @Data
 @NoArgsConstructor
@@ -10,11 +9,10 @@ import br.com.unit.classes.id.CondutorId;
 @Entity
 @Table(name = "condutores")
 @EqualsAndHashCode(callSuper = true)
-@IdClass(CondutorId.class)
 public class Condutor extends Pessoa {
 
     @Id
-    @Column(name = "idCondutor")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idCondutor;
 
     @Column(nullable = false)

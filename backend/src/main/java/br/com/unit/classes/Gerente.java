@@ -2,7 +2,6 @@ package br.com.unit.classes;
 
 import jakarta.persistence.*;
 import lombok.*;
-import br.com.unit.classes.id.GerenteId;
 
 @Data
 @NoArgsConstructor
@@ -10,11 +9,10 @@ import br.com.unit.classes.id.GerenteId;
 @Entity
 @Table(name = "gerentes")
 @EqualsAndHashCode(callSuper = true)
-@IdClass(GerenteId.class)
 public class Gerente extends Pessoa {
 
     @Id
-    @Column(name = "idGerente")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idGerente;
 
     public void cadastrarEvento() {
