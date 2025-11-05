@@ -1,6 +1,7 @@
 package br.com.unit.classes;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.MappedSuperclass;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -8,14 +9,8 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity
-@Table(name = "pessoas")
-@Inheritance(strategy = InheritanceType.JOINED)
+@MappedSuperclass
 public abstract class Pessoa {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer idPessoa;
 
     @Column(nullable = false)
     private String nome;

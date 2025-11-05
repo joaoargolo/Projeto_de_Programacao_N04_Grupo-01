@@ -16,6 +16,8 @@ import org.springframework.http.HttpStatus;
 //  "email": "ana@example.com",
 //  "senha": "1234",
 //  "dataNasc": "2001-07-10",
+//  "telefone": "79998057227",
+//  "perfil": "sokdoef"
 //}
 
 @RestController

@@ -16,6 +16,8 @@ import org.springframework.http.HttpStatus;
 //  "email": "joao@example.com",
 //  "senha": "1234",
 //  "dataNasc": "1990-05-10",
+//  "telefone": "79998057227",
+//  "perfil": "sokdoef",
 //  "eventoConduzido": "Workshop Spring Boot"
 //}
 
@@ -49,7 +51,7 @@ public class CondutorController {
     public ResponseEntity<Object> atualizarCondutor(@PathVariable int id, @RequestBody Condutor condutor) {
 
         condutorService.updateCondutor(id, condutor);
-        return ResponseEntity.ok("Condutor com o id:" + id + "atualizado com sucesso!!");
+        return ResponseEntity.ok("Condutor com o id: " + id + " atualizado com sucesso!!");
     }
 
     @DeleteMapping("/deletar/{id}")

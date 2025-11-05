@@ -9,9 +9,10 @@ import lombok.*;
 @Entity
 @Table(name = "gerentes")
 @EqualsAndHashCode(callSuper = true)
-@PrimaryKeyJoinColumn(name = "idPessoa")
 public class Gerente extends Pessoa {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idGerente;
 
     public void cadastrarEvento() {

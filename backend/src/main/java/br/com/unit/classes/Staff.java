@@ -9,7 +9,6 @@ import lombok.*;
 @Entity
 @Table(name = "staffs")
 @EqualsAndHashCode(callSuper = true)
-@PrimaryKeyJoinColumn(name = "idPessoa")
 public class Staff extends Pessoa {
 
     @Id
