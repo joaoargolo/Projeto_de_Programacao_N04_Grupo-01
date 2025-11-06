@@ -15,6 +15,15 @@ public class Espectador extends Pessoa {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idEspectador;
 
+    public enum Status {
+        ATIVO,
+        INATIVO
+    }
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Status status = Status.INATIVO;
+
     public void cadastrarEvento() {
         System.out.println("O usuário foi cadastrado no evento.");
     }

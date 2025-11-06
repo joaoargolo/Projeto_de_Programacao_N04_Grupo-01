@@ -24,6 +24,7 @@ public class EspectadorServiceImpl implements EspectadorService {
             throw new IllegalArgumentException("Já existe um espectador com este e-mail ou CPF!");
         }
 
+        espectador.setStatus(Espectador.Status.INATIVO);
         espectadorRepository.save(espectador);
     }
 
