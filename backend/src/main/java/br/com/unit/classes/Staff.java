@@ -5,6 +5,7 @@ import lombok.*;
 import java.util.List;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
 
 @Data
 @NoArgsConstructor
@@ -13,8 +14,8 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 @Table(name = "staffs")
 @EqualsAndHashCode(callSuper = true)
 @JsonIdentityInfo(
-        generator = ObjectIdGenerators.PropertyGenerator.class,
-        property = "idStaff"
+    generator = ObjectIdGenerators.PropertyGenerator.class,
+    property = "idStaff"
 )
 public class Staff extends Pessoa {
 
@@ -26,6 +27,7 @@ public class Staff extends Pessoa {
     private String especializacao;
 
     @ManyToMany(mappedBy = "staffs")
+    @JsonIdentityReference(alwaysAsId = true)
     private List<Evento> eventosAuxiliados;
 
     public void atribuirEvento(Evento evento) {
