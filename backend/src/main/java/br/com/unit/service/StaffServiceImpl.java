@@ -10,6 +10,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.ArrayList;
+import java.util.Set;
+import java.util.HashSet;
+import java.util.Collections;
 
 @Service
 public class StaffServiceImpl implements StaffService {
@@ -28,20 +32,36 @@ public class StaffServiceImpl implements StaffService {
             throw new IllegalArgumentException("Já existe um staff com este e-mail ou CPF!");
         }
 
-        if (staff.getEventosAuxiliados() != null) {
-                List<Evento> eventosValidados = staff.getEventosAuxiliados().stream().map(e -> {
-                    if (e.getIdEvento() == null) {
-                        throw new IllegalArgumentException("ID do evento não pode ser nulo!");
-                    }
-                    return eventoRepository.findById(e.getIdEvento()).orElseThrow(() -> new IllegalArgumentException("Evento com ID " + e.getIdEvento() + " não encontrado!"));
-                }).toList();
-                staff.setEventosAuxiliados(eventosValidados);
+        if (staff.getEventosAuxiliados() != null && !staff.getEventosAuxiliados().isEmpty()) {
+            List<Evento> eventosValidados = staff.getEventosAuxiliados().stream().map(e -> 
+                eventoRepository.findById(e.getIdEvento()).orElseThrow(() -> new IllegalArgumentException("Evento com ID " + e.getIdEvento() + " não encontrado!"))
+            ).toList();
 
+            // Set no lado inverso da relação (usar lista mutável)
+            staff.setEventosAuxiliados(new ArrayList<>(eventosValidados));
+
+            // Primeiro salva o staff para garantir que ele tem ID
+            Staff staffSalvo = staffRepository.save(staff);
+
+            // Atualiza o lado dono (Evento.staffs) para incluir o staff salvo
+            for (Evento ev : eventosValidados) {
+                List<Staff> listaStaffs = ev.getStaffs();
+                if (listaStaffs == null) {
+                    listaStaffs = new ArrayList<>();
+                    ev.setStaffs(listaStaffs);
+                }
+                boolean presente = listaStaffs.stream().anyMatch(s -> s.getIdStaff() != null && s.getIdStaff().equals(staffSalvo.getIdStaff()));
+                if (!presente) {
+                    listaStaffs.add(staffSalvo);
+                    eventoRepository.save(ev);
+                }
+            }
+
+            return;
         } else {
             staff.setEventosAuxiliados(null);
+            staffRepository.save(staff);
         }
-
-        staffRepository.save(staff);
     }
 
     @Override
@@ -58,10 +78,63 @@ public class StaffServiceImpl implements StaffService {
         staffExistente.setPerfil(staffAtualizado.getPerfil());
         staffExistente.setEspecializacao(staffAtualizado.getEspecializacao());
 
-        if (staffAtualizado.getEventosAuxiliados() != null && !staffAtualizado.getEventosAuxiliados().isEmpty()) {
-            List<Evento> eventosValidados = staffAtualizado.getEventosAuxiliados().stream().map(e -> eventoRepository.findById(e.getIdEvento()).orElseThrow(() -> new IllegalArgumentException("Evento com ID " + e.getIdEvento() + " não encontrado!"))).toList();
-            staffExistente.setEventosAuxiliados(eventosValidados);
+        if (staffAtualizado.getEventosAuxiliados() != null) {
+            // build validated events list (allow empty list)
+            List<Evento> eventosValidados = staffAtualizado.getEventosAuxiliados().isEmpty()
+                    ? Collections.emptyList()
+                    : staffAtualizado.getEventosAuxiliados().stream()
+                    .map(e -> eventoRepository.findById(e.getIdEvento()).orElseThrow(() -> new IllegalArgumentException("Evento com ID " + e.getIdEvento() + " não encontrado!")))
+                    .toList();
+
+            List<Evento> eventosAntigos = staffExistente.getEventosAuxiliados();
+            if (eventosAntigos == null) eventosAntigos = Collections.emptyList();
+
+            Set<Integer> oldIds = new HashSet<>();
+            for (Evento ev : eventosAntigos) if (ev.getIdEvento() != null) oldIds.add(ev.getIdEvento());
+
+            Set<Integer> newIds = new HashSet<>();
+            for (Evento ev : eventosValidados) if (ev.getIdEvento() != null) newIds.add(ev.getIdEvento());
+
+            // remove staff from events that are no longer associated
+            for (Evento evAnt : eventosAntigos) {
+                if (!newIds.contains(evAnt.getIdEvento())) {
+                    List<Staff> sList = evAnt.getStaffs();
+                    if (sList != null) {
+                        sList.removeIf(s -> s.getIdStaff() != null && s.getIdStaff().equals(staffExistente.getIdStaff()));
+                        eventoRepository.save(evAnt);
+                    }
+                }
+            }
+
+            // add staff to new events
+            for (Evento evNovo : eventosValidados) {
+                if (!oldIds.contains(evNovo.getIdEvento())) {
+                    List<Staff> sList = evNovo.getStaffs();
+                    if (sList == null) {
+                        sList = new ArrayList<>();
+                        evNovo.setStaffs(sList);
+                    }
+                    boolean presente = sList.stream().anyMatch(s -> s.getIdStaff() != null && s.getIdStaff().equals(staffExistente.getIdStaff()));
+                    if (!presente) {
+                        sList.add(staffExistente);
+                        eventoRepository.save(evNovo);
+                    }
+                }
+            }
+
+            staffExistente.setEventosAuxiliados(new ArrayList<>(eventosValidados));
         } else {
+            // if null, remove from all old events
+            List<Evento> eventosAntigos = staffExistente.getEventosAuxiliados();
+            if (eventosAntigos != null) {
+                for (Evento evAnt : eventosAntigos) {
+                    List<Staff> sList = evAnt.getStaffs();
+                    if (sList != null) {
+                        sList.removeIf(s -> s.getIdStaff() != null && s.getIdStaff().equals(staffExistente.getIdStaff()));
+                        eventoRepository.save(evAnt);
+                    }
+                }
+            }
             staffExistente.setEventosAuxiliados(null);
         }
 
