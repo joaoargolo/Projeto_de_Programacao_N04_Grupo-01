@@ -17,8 +17,12 @@ import java.util.*;
 //  "email": "luiz@example.com",
 //  "senha": "1234",
 //  "dataNasc": "2005-03-12",
+//  "telefone": "79995634252",
+//  "perfil": "ewrfbhrwevuib",
 //  "especializacao": "mixagem",
-//  "eventoAuxiliado": "Taylor_Swift:_The_Eras_Tour"
+//  "eventosAuxiliados": [
+//    {"idEvento": 1}
+//  ]
 //}
 
 @RestController
@@ -52,12 +56,10 @@ public class StaffController {
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
-
     }
 
     @DeleteMapping("/deletar/{id}")
     public ResponseEntity<String> removerStaff(@PathVariable int id){
-
         try {
             staffService.deleteStaff(id);
             return ResponseEntity.ok("Membro do staff com ID " + id + " removido com sucesso!");

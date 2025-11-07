@@ -17,6 +17,8 @@ import org.springframework.http.HttpStatus;
 //  "email": "alan@example.com",
 //  "senha": "1234",
 //  "dataNasc": "2000-01-01",
+//  "telefone": "79995634252",
+//  "perfil": "ewrfbhrwevuib"
 //}
 
 @RestController
@@ -25,8 +27,6 @@ public class GerenteController {
 
     @Autowired
     private GerenteService gerenteService;
-
-    private List<Gerente> gerentes = new ArrayList<>();
 
     @PostMapping("/criar")
     public ResponseEntity<String> cadastrarGerente(@RequestBody Gerente g) {
@@ -45,14 +45,21 @@ public class GerenteController {
 
     @PutMapping("atualizar/{id}")
     public ResponseEntity<Object> atualizarGerente(@PathVariable int id, @RequestBody Gerente g) {
-
-        gerenteService.updateGerente(id, g);
-        return ResponseEntity.ok("Gerente com o id:" + id + "atualizado com sucesso!!");
+        try {
+            gerenteService.updateGerente(id, g);
+            return ResponseEntity.ok("Gerente com o id:" + id + "atualizado com sucesso!!");
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
     }
 
     @DeleteMapping("/deletar/{id}")
     public ResponseEntity<String> removerGerente(@PathVariable int id){
-        gerenteService.deleteGerente(id);
-        return ResponseEntity.ok("Gerente com o id " + id + " foi removido com sucesso!");
+        try {
+            gerenteService.deleteGerente(id);
+            return ResponseEntity.ok("Gerente com o id " + id + " foi removido com sucesso!");
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
     }
 }

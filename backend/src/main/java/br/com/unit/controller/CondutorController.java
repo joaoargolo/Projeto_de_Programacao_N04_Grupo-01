@@ -11,14 +11,16 @@ import org.springframework.http.HttpStatus;
 
 //POST http://localhost:8080/condutores
 //{
-//  "nome": "João",
-//  "cpf": "12345678900",
-//  "email": "joao@example.com",
-//  "senha": "1234",
-//  "dataNasc": "1990-05-10",
-//  "telefone": "79998057227",
-//  "perfil": "sokdoef",
-//  "eventoConduzido": "Workshop Spring Boot"
+//  "nome": "Carlos Andrade",
+//  "email": "carlos.andrade@empresa.com",
+//  "cpf": "11223344556",
+//  "senha": "senha123",
+//  "dataNasc": "1988-03-14",
+//  "telefone": "(81) 97777-1111",
+//  "perfil": "CONDUTOR",
+//  "eventosConduzidos": [
+//    { "idEvento": 1 }
+//  ]
 //}
 
 
@@ -28,8 +30,6 @@ public class CondutorController {
 
     @Autowired
     private CondutorService condutorService;
-
-    private List<Condutor> condutores = new ArrayList<>();
 
     @GetMapping("/listar")
     public Collection<Condutor> listarCondutores() {
@@ -41,7 +41,6 @@ public class CondutorController {
         try {
             condutorService.createCondutor(condutor);
             return ResponseEntity.status(HttpStatus.CREATED).body("Condutor cadastrado com sucesso: " + condutor.getIdCondutor());
-
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
@@ -49,14 +48,21 @@ public class CondutorController {
 
     @PutMapping("atualizar/{id}")
     public ResponseEntity<Object> atualizarCondutor(@PathVariable int id, @RequestBody Condutor condutor) {
-
-        condutorService.updateCondutor(id, condutor);
-        return ResponseEntity.ok("Condutor com o id: " + id + " atualizado com sucesso!!");
+        try {
+            condutorService.updateCondutor(id, condutor);
+            return ResponseEntity.ok("Condutor com o id: " + id + " atualizado com sucesso!!");
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
     }
 
     @DeleteMapping("/deletar/{id}")
     public ResponseEntity<String> removerCondutor(@PathVariable int id) {
-        condutorService.deleteCondutor(id);
-        return ResponseEntity.ok("Condutor com ID " + id + " removido com sucesso!");
+        try {
+            condutorService.deleteCondutor(id);
+            return ResponseEntity.ok("Condutor com ID " + id + " removido com sucesso!");
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
     }
 }
