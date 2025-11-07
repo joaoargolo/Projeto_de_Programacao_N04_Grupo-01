@@ -3,6 +3,7 @@ package br.com.unit.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import br.com.unit.classes.Condutor;
+import br.com.unit.classes.Evento;
 import br.com.unit.service.CondutorService;
 import java.util.*;
 
@@ -37,8 +38,26 @@ public class CondutorController {
     }
 
     @PostMapping("/criar")
-    public ResponseEntity<String> criarCondutor(@RequestBody Condutor condutor) {
+    public ResponseEntity<String> criarCondutor(@RequestBody br.com.unit.dto.CondutorInputDTO dto) {
         try {
+            Condutor condutor = new Condutor();
+            condutor.setNome(dto.getNome());
+            condutor.setCpf(dto.getCpf());
+            condutor.setEmail(dto.getEmail());
+            condutor.setSenha(dto.getSenha());
+            condutor.setDataNasc(dto.getDataNasc());
+            condutor.setTelefone(dto.getTelefone());
+            condutor.setPerfil(dto.getPerfil());
+
+            if (dto.getEventosConduzidos() != null) {
+                java.util.List<Evento> eventos = dto.getEventosConduzidos().stream().map(evId -> {
+                    Evento e = new Evento();
+                    e.setIdEvento(evId);
+                    return e;
+                }).toList();
+                condutor.setEventosConduzidos(new java.util.ArrayList<>(eventos));
+            }
+
             condutorService.createCondutor(condutor);
             return ResponseEntity.status(HttpStatus.CREATED).body("Condutor cadastrado com sucesso: " + condutor.getIdCondutor());
         } catch (IllegalArgumentException e) {
@@ -47,8 +66,26 @@ public class CondutorController {
     }
 
     @PutMapping("atualizar/{id}")
-    public ResponseEntity<Object> atualizarCondutor(@PathVariable int id, @RequestBody Condutor condutor) {
+    public ResponseEntity<Object> atualizarCondutor(@PathVariable int id, @RequestBody br.com.unit.dto.CondutorInputDTO dto) {
         try {
+            Condutor condutor = new Condutor();
+            condutor.setNome(dto.getNome());
+            condutor.setCpf(dto.getCpf());
+            condutor.setEmail(dto.getEmail());
+            condutor.setSenha(dto.getSenha());
+            condutor.setDataNasc(dto.getDataNasc());
+            condutor.setTelefone(dto.getTelefone());
+            condutor.setPerfil(dto.getPerfil());
+
+            if (dto.getEventosConduzidos() != null) {
+                java.util.List<Evento> eventos = dto.getEventosConduzidos().stream().map(evId -> {
+                    Evento e = new Evento();
+                    e.setIdEvento(evId);
+                    return e;
+                }).toList();
+                condutor.setEventosConduzidos(new java.util.ArrayList<>(eventos));
+            }
+
             condutorService.updateCondutor(id, condutor);
             return ResponseEntity.ok("Condutor com o id: " + id + " atualizado com sucesso!!");
         } catch (IllegalArgumentException e) {
