@@ -8,10 +8,5 @@ import java.util.Optional;
 
 @Repository
 public interface EspectadorRepository extends JpaRepository<Espectador, Integer> {
-
     Optional<Espectador> findByEmail(String email);
-
-    Optional<Espectador> findByCpf(String cpf);
-
-    boolean existsByEmailOrCpf(String email, String cpf);
 }

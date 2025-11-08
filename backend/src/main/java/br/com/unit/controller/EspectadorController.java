@@ -54,4 +54,22 @@ public class EspectadorController {
         espectadorService.deleteEspectador(id);
         return ResponseEntity.ok("Espectador com ID " + id + " removido com sucesso!");
     }
+
+    // 🔍 Buscar espectador por e-mail
+    @GetMapping("/email/{email}")
+    public ResponseEntity<?> buscarPorEmail(@PathVariable String email) {
+        return espectadorService.buscarPorEmail(email)
+                .<ResponseEntity<?>>map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).body("Espectador não encontrado"));
+    }
+
+    // 🔐 Validar login
+    @PostMapping("/login")
+    public ResponseEntity<String> validarLogin(@RequestParam String email, @RequestParam String senha) {
+        boolean valido = espectadorService.validarLogin(email, senha);
+        return valido ? ResponseEntity.ok("Login bem-sucedido!")
+                : ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Email ou senha inválidos.");
+    }
+
+
 }
