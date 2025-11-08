@@ -5,7 +5,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import br.com.unit.classes.Evento;
 import br.com.unit.repository.EspectadorRepository;
+import br.com.unit.repository.EventoRepository;
 import org.springframework.stereotype.Service;
 import br.com.unit.classes.Espectador;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +18,9 @@ public class EspectadorServiceImpl implements EspectadorService {
 
     @Autowired
     private EspectadorRepository espectadorRepository;
+
+    @Autowired
+    private EventoRepository eventoRepository;
 
     @Override
     @Transactional
@@ -42,6 +47,7 @@ public class EspectadorServiceImpl implements EspectadorService {
         espectadorExistente.setTelefone(espectadorAtualizado.getTelefone());
         espectadorExistente.setPerfil(espectadorAtualizado.getPerfil());
 
+        espectadorExistente.atualizarStatus();
         espectadorRepository.save(espectadorExistente);
     }
 
@@ -59,5 +65,35 @@ public class EspectadorServiceImpl implements EspectadorService {
     @Transactional(readOnly = true)
     public Collection<Espectador> getEspectador() {
         return espectadorRepository.findAll();
+    }
+
+    @Transactional
+    public void participarDeEvento(int idEspectador, int idEvento) {
+        Espectador espectador = espectadorRepository.findById(idEspectador)
+                .orElseThrow(() -> new IllegalArgumentException("Espectador com ID " + idEspectador + " não encontrado!"));
+        Evento evento = eventoRepository.findById(idEvento)
+                .orElseThrow(() -> new IllegalArgumentException("Evento com ID " + idEvento + " não encontrado!"));
+
+        if (!espectador.getEventosDoEspectador().contains(evento)) {
+            espectador.getEventosDoEspectador().add(evento);
+            evento.getEspectadores().add(espectador);
+        }
+
+        espectador.atualizarStatus();
+        espectadorRepository.save(espectador);
+    }
+
+    @Transactional
+    public void sairDoEvento(int idEspectador, int idEvento) {
+        Espectador espectador = espectadorRepository.findById(idEspectador)
+                .orElseThrow(() -> new IllegalArgumentException("Espectador com ID " + idEspectador + " não encontrado!"));
+        Evento evento = eventoRepository.findById(idEvento)
+                .orElseThrow(() -> new IllegalArgumentException("Evento com ID " + idEvento + " não encontrado!"));
+
+        espectador.getEventosDoEspectador().remove(evento);
+        evento.getEspectadores().remove(espectador);
+
+        espectador.atualizarStatus();
+        espectadorRepository.save(espectador);
     }
 }
