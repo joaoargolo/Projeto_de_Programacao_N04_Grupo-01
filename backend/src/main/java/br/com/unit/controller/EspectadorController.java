@@ -34,6 +34,7 @@ public class EspectadorController {
 
     @PostMapping("/criar")
     public ResponseEntity<String> criarEspectador(@RequestBody Espectador espectador) {
+
         try {
             espectadorService.createEspectador(espectador);
             return ResponseEntity.status(HttpStatus.CREATED).body("Espectador cadastrado com sucesso: " + espectador.getIdEspectador());
@@ -54,6 +55,7 @@ public class EspectadorController {
         espectadorService.deleteEspectador(id);
         return ResponseEntity.ok("Espectador com ID " + id + " removido com sucesso!");
     }
+
 
     // 🔍 Buscar espectador por e-mail
     @GetMapping("/email/{email}")
