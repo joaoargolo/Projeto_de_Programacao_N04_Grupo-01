@@ -41,6 +41,17 @@ public class LoginController {
         String email = EmailLoginField.getText();
         String senha = SenhaLoginField.getText();
 
+        try {
+            var response = service.LoginService.postLogin(email, senha);
+            if (response.statusCode() == 200) {
+                System.out.println("Login bem-sucedido!");
+            } else {
+                EmailErrorLabel.setText("Email ou senha incorretos.");
+                SenhaErrorLabel.setText("Email ou senha incorretos.");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         if (email.isEmpty()) {
             EmailErrorLabel.setText("Por favor, insira um email.");
 

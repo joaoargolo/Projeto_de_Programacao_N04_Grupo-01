@@ -31,8 +31,10 @@ public class GerenteController {
     @PostMapping("/criar")
     public ResponseEntity<String> cadastrarGerente(@RequestBody Gerente g) {
         try {
+            System.out.println("Recebido gerente: " + g.getNome());
             gerenteService.createGerente(g);
-            return ResponseEntity.status(HttpStatus.CREATED).body("Gerente cadastrado com sucesso: " + g.getIdGerente());
+            return ResponseEntity.status(HttpStatus.CREATED)
+                    .body("Gerente cadastrado com sucesso: " + g.getIdGerente());
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
@@ -51,7 +53,7 @@ public class GerenteController {
     }
 
     @DeleteMapping("/deletar/{id}")
-    public ResponseEntity<String> removerGerente(@PathVariable int id){
+    public ResponseEntity<String> removerGerente(@PathVariable int id) {
         gerenteService.deleteGerente(id);
         return ResponseEntity.ok("Gerente com o id " + id + " foi removido com sucesso!");
     }

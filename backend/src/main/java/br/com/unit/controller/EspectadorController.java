@@ -35,8 +35,10 @@ public class EspectadorController {
     @PostMapping("/criar")
     public ResponseEntity<String> criarEspectador(@RequestBody Espectador espectador) {
         try {
+            System.out.println("Recebido espectador: " + espectador.getNome());
             espectadorService.createEspectador(espectador);
-            return ResponseEntity.status(HttpStatus.CREATED).body("Espectador cadastrado com sucesso: " + espectador.getIdEspectador());
+            return ResponseEntity.status(HttpStatus.CREATED)
+                    .body("Espectador cadastrado com sucesso: " + espectador.getIdEspectador());
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }

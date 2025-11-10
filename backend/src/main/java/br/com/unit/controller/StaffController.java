@@ -31,13 +31,17 @@ public class StaffController {
     private List<Staff> staff = new ArrayList<>();
 
     @GetMapping("/listar")
-    public Collection<Staff> listarStaff() { return staffService.getStaff(); }
+    public Collection<Staff> listarStaff() {
+        return staffService.getStaff();
+    }
 
     @PostMapping("/criar")
-    public ResponseEntity<String> criarStaff(@RequestBody Staff staff1){
+    public ResponseEntity<String> criarStaff(@RequestBody Staff staff1) {
         try {
+            System.out.println("Recebido staff: " + staff1.getNome());
             staffService.createStaff(staff1);
-            return ResponseEntity.status(HttpStatus.CREATED).body("Membro do staff cadastrado com sucesso: " + staff1.getIdStaff());
+            return ResponseEntity.status(HttpStatus.CREATED)
+                    .body("Membro do staff cadastrado com sucesso: " + staff1.getIdStaff());
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
@@ -52,7 +56,7 @@ public class StaffController {
     }
 
     @DeleteMapping("/deletar/{id}")
-    public ResponseEntity<String> removerStaff(@PathVariable int id){
+    public ResponseEntity<String> removerStaff(@PathVariable int id) {
         staffService.deleteStaff(id);
         return ResponseEntity.ok("Membro do staff com ID " + id + " removido com sucesso!");
     }
