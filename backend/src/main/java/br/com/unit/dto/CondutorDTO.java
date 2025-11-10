@@ -1,7 +1,7 @@
 package br.com.unit.dto;
 
-public record StaffDTO(
-	int idStaff,
+public record CondutorDTO(
+	int idCondutor,
 	String nome,
 	String cpf,
 	String email,
@@ -9,8 +9,7 @@ public record StaffDTO(
 	String dataNasc,
 	String telefone,
 	String perfil,
-	String especializacao,
-	java.util.List<Integer> eventosAuxiliados
+	java.util.List<Integer> eventosConduzidos
 ) {
 
 }
