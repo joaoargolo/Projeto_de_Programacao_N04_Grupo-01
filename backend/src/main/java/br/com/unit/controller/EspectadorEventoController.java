@@ -16,6 +16,7 @@ public class EspectadorEventoController {
     @Autowired
     private EspectadorService espectadorService;
 
+    //http://localhost:8080/espectadores/eventos/participar
     //{
     //  "idEspectador": 1,
     //  "idEvento": 2
@@ -30,6 +31,7 @@ public class EspectadorEventoController {
         }
     }
 
+    //http://localhost:8080/espectadores/eventos/sair
     //{
     //  "idEspectador": 1,
     //  "idEvento": 2
