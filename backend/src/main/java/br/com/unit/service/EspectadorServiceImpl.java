@@ -17,14 +17,20 @@ public class EspectadorServiceImpl implements EspectadorService {
     private EspectadorRepository espectadorRepository;
 
     @Override
-    public void createEspectador(Espectador espectador){
+    public void createEspectador(Espectador espectador) {
         boolean jaExiste = espectadorRepository.existsByEmailOrCpf(espectador.getEmail(), espectador.getCpf());
 
-        if (jaExiste){
+        if (jaExiste) {
             throw new IllegalArgumentException("Já existe um espectador com este e-mail ou CPF!");
         }
 
         espectadorRepository.save(espectador);
+    }
+
+    @Override
+    public boolean autenticar(String email, String senha) {
+
+        return espectadorRepository.existsByEmailAndSenha(email, senha);
     }
 
     @Override
