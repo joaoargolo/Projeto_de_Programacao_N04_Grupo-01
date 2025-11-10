@@ -5,7 +5,12 @@ import br.com.unit.classes.Espectador;
 
 public interface EspectadorService {
     public abstract void createEspectador(Espectador espectador);
+
     public abstract void updateEspectador(int id, Espectador espectador);
+
     public abstract void deleteEspectador(int id);
+
+    public abstract boolean autenticar(String email, String senha);
+
     public abstract Collection<Espectador> getEspectador();
 }

@@ -14,10 +14,12 @@ import org.springframework.http.HttpStatus;
 @RequestMapping("/login")
 public class LoginController {
 
+    private EspectadorService espectadorService;
+
     @PostMapping
     public ResponseEntity<String> login(@RequestBody LoginDTO loginDTO) {
 
-        boolean valido = loginDTO.email().equals("teste@teste.com") && loginDTO.senha().equals("123");
+        boolean valido = espectadorService.autenticar(loginDTO.email(), loginDTO.senha());
 
         if (valido) {
             return ResponseEntity.ok("Login realizado com sucesso!");
