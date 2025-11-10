@@ -22,6 +22,9 @@ public class EspectadorServiceImpl implements EspectadorService {
     @Autowired
     private EventoRepository eventoRepository;
 
+    @Autowired
+    private PasswordService passwordService;
+
     @Override
     @Transactional
     public void createEspectador(Espectador espectador){
@@ -29,6 +32,9 @@ public class EspectadorServiceImpl implements EspectadorService {
         if (jaExiste){
             throw new IllegalArgumentException("Já existe um espectador com este e-mail ou CPF!");
         }
+
+        String senhaCriptografada = passwordService.criptografar(espectador.getSenha());
+        espectador.setSenha(senhaCriptografada);
 
         espectador.setStatus(Espectador.Status.INATIVO);
         espectadorRepository.save(espectador);
@@ -42,7 +48,16 @@ public class EspectadorServiceImpl implements EspectadorService {
         espectadorExistente.setNome(espectadorAtualizado.getNome());
         espectadorExistente.setEmail(espectadorAtualizado.getEmail());
         espectadorExistente.setCpf(espectadorAtualizado.getCpf());
-        espectadorExistente.setSenha(espectadorAtualizado.getSenha());
+        
+        if (espectadorAtualizado.getSenha() != null && !espectadorAtualizado.getSenha().isEmpty()) {
+            if (!passwordService.jaEstaCriptografada(espectadorAtualizado.getSenha())) {
+                String senhaCriptografada = passwordService.criptografar(espectadorAtualizado.getSenha());
+                espectadorExistente.setSenha(senhaCriptografada);
+            } else {
+                espectadorExistente.setSenha(espectadorAtualizado.getSenha());
+            }
+        }
+        
         espectadorExistente.setDataNasc(espectadorAtualizado.getDataNasc());
         espectadorExistente.setTelefone(espectadorAtualizado.getTelefone());
         espectadorExistente.setPerfil(espectadorAtualizado.getPerfil());

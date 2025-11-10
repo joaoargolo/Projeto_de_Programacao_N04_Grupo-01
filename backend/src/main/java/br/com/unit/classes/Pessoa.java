@@ -21,7 +21,7 @@ public abstract class Pessoa {
     @Column(nullable = false)
     private String email;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 60)
     private String senha;
 
     @Column(nullable = false)
