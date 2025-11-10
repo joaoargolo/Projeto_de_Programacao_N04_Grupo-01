@@ -1,12 +1,17 @@
 package br.com.unit.service;
 
-import br.com.unit.classes.Espectador;
-import br.com.unit.repository.EspectadorRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import java.util.Collection;
-import java.util.Optional;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import br.com.unit.classes.Evento;
+import br.com.unit.repository.EspectadorRepository;
+import br.com.unit.repository.EventoRepository;
+import org.springframework.stereotype.Service;
+import br.com.unit.classes.Espectador;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class EspectadorServiceImpl implements EspectadorService {
@@ -14,43 +19,81 @@ public class EspectadorServiceImpl implements EspectadorService {
     @Autowired
     private EspectadorRepository espectadorRepository;
 
+    @Autowired
+    private EventoRepository eventoRepository;
+
     @Override
-    public void createEspectador(Espectador espectador) {
+    @Transactional
+    public void createEspectador(Espectador espectador){
+        boolean jaExiste = espectadorRepository.existsByEmailOrCpf(espectador.getEmail(), espectador.getCpf());
+        if (jaExiste){
+            throw new IllegalArgumentException("Já existe um espectador com este e-mail ou CPF!");
+        }
+
+        espectador.setStatus(Espectador.Status.INATIVO);
         espectadorRepository.save(espectador);
     }
 
     @Override
-    public void updateEspectador(int id, Espectador espectador) {
-        Espectador existente = espectadorRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Espectador não encontrado"));
-        existente.setNome(espectador.getNome());
-        existente.setCpf(espectador.getCpf());
-        existente.setEmail(espectador.getEmail());
-        existente.setSenha(espectador.getSenha());
-        existente.setDataNasc(espectador.getDataNasc());
-        espectadorRepository.save(existente);
+    @Transactional
+    public void updateEspectador(int id, Espectador espectadorAtualizado) {
+        Espectador espectadorExistente = espectadorRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Espectador com ID " + id + " não encontrado!"));
+
+        espectadorExistente.setNome(espectadorAtualizado.getNome());
+        espectadorExistente.setEmail(espectadorAtualizado.getEmail());
+        espectadorExistente.setCpf(espectadorAtualizado.getCpf());
+        espectadorExistente.setSenha(espectadorAtualizado.getSenha());
+        espectadorExistente.setDataNasc(espectadorAtualizado.getDataNasc());
+        espectadorExistente.setTelefone(espectadorAtualizado.getTelefone());
+        espectadorExistente.setPerfil(espectadorAtualizado.getPerfil());
+
+        espectadorExistente.atualizarStatus();
+        espectadorRepository.save(espectadorExistente);
     }
 
     @Override
+    @Transactional
     public void deleteEspectador(int id) {
+        if (!espectadorRepository.existsById(id)) {
+            throw new IllegalArgumentException("Espectador com ID " + id + " não encontrado!");
+        }
+
         espectadorRepository.deleteById(id);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Collection<Espectador> getEspectador() {
         return espectadorRepository.findAll();
     }
 
-    // 🔍 Buscar por e-mail
-    @Override
-    public Optional<Espectador> buscarPorEmail(String email) {
-        return espectadorRepository.findByEmail(email);
+    @Transactional
+    public void participarDeEvento(int idEspectador, int idEvento) {
+        Espectador espectador = espectadorRepository.findById(idEspectador)
+                .orElseThrow(() -> new IllegalArgumentException("Espectador com ID " + idEspectador + " não encontrado!"));
+        Evento evento = eventoRepository.findById(idEvento)
+                .orElseThrow(() -> new IllegalArgumentException("Evento com ID " + idEvento + " não encontrado!"));
+
+        if (!espectador.getEventosDoEspectador().contains(evento)) {
+            espectador.getEventosDoEspectador().add(evento);
+            evento.getEspectadores().add(espectador);
+        }
+
+        espectador.atualizarStatus();
+        espectadorRepository.save(espectador);
     }
 
-    // 🔐 Validar login (email + senha)
-    @Override
-    public boolean validarLogin(String email, String senha) {
-        Optional<Espectador> espectador = espectadorRepository.findByEmail(email);
-        return espectador.isPresent() && espectador.get().getSenha().equals(senha);
+    @Transactional
+    public void sairDoEvento(int idEspectador, int idEvento) {
+        Espectador espectador = espectadorRepository.findById(idEspectador)
+                .orElseThrow(() -> new IllegalArgumentException("Espectador com ID " + idEspectador + " não encontrado!"));
+        Evento evento = eventoRepository.findById(idEvento)
+                .orElseThrow(() -> new IllegalArgumentException("Evento com ID " + idEvento + " não encontrado!"));
+
+        espectador.getEventosDoEspectador().remove(evento);
+        evento.getEspectadores().remove(espectador);
+
+        espectador.atualizarStatus();
+        espectadorRepository.save(espectador);
     }
 }
