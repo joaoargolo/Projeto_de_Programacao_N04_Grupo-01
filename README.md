@@ -43,3 +43,15 @@
 
 > **Frontend:**  
 >> **Arthur de Oliveira**
+
+
+## Exemplos de Saída:
+
++---------------+-------------+------------+------------------------+------------------+---------+------------------+-------------+---------+
+| id_espectador | cpf         | data_nasc  | email                  | nome             | perfil  | senha            | telefone    | status  |       
++---------------+-------------+------------+------------------------+------------------+---------+------------------+-------------+---------+       
+|             1 | 11122233344 | 2001-07-10 | ana@example.com        | Ana              | sokdoef | 1234             | 79998057227 | INATIVO |       
+|             2 | 11122233354 | 2025-11-03 | chups@gmail.com        | chupetinha       | chupestinks | AmoAlan01!  | NULL        | INATIVO |       
+|             3 | 11111111111 | 2001-07-11 | cuzao@example.com      | Luciano Hulk     | enpap  | Shimerbiulock1!  | 79998057227 | INATIVO |       
+|             4 | 12345678910 | 2025-11-13 | chessvideos@example.com | Ananias Ferreira | ananias | Xablau01!!! | NULL        | INATIVO |       
++---------------+-------------+------------+------------------------+------------------+---------+------------------+-------------+---------+
