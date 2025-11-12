@@ -14,4 +14,7 @@ public interface EspectadorRepository extends JpaRepository<Espectador, Integer>
     Optional<Espectador> findByCpf(String cpf);
 
     boolean existsByEmailOrCpf(String email, String cpf);
+
+    Optional<Espectador> findByResetToken(String resetToken);
+
 }
