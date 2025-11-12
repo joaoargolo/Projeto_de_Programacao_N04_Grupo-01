@@ -3,6 +3,9 @@ package br.com.unit.classes;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.List;
+import java.time.LocalDateTime;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -15,6 +18,27 @@ public class Espectador extends Pessoa {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idEspectador;
 
+    public enum Status {
+        ATIVO,
+        INATIVO,
+        PENDENTE_DE_CONFIRMACAO
+    }
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Status status = Status.INATIVO;
+
+    @ManyToMany(mappedBy = "espectadores")
+    private List<Evento> eventosDoEspectador;
+
+    public void atualizarStatus() {
+        if (eventosDoEspectador == null || eventosDoEspectador.isEmpty()) {
+            this.status = Status.INATIVO;
+        } else {
+            this.status = Status.ATIVO;
+        }
+    }
+
     public void cadastrarEvento() {
         System.out.println("O usuário foi cadastrado no evento.");
     }
@@ -22,4 +46,11 @@ public class Espectador extends Pessoa {
     public void sairEvento() {
         System.out.println("O usuário foi retirado do evento");
     }
+
+    @Column(name = "reset_token")
+    private String resetToken;
+
+    @Column(name = "token_expiration")
+    private LocalDateTime tokenExpiration;
+
 }
