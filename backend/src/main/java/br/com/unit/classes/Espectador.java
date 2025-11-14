@@ -4,6 +4,10 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.List;
+<<<<<<< HEAD
+=======
+import java.time.LocalDateTime;
+>>>>>>> 790a6f9bb50b4c4f62bd6a5ba0b1123470d8f939
 
 @Data
 @NoArgsConstructor
@@ -45,4 +49,15 @@ public class Espectador extends Pessoa {
     public void sairEvento() {
         System.out.println("O usuário foi retirado do evento");
     }
+<<<<<<< HEAD
 }
+=======
+
+    @Column(name = "reset_token")
+    private String resetToken;
+
+    @Column(name = "token_expiration")
+    private LocalDateTime tokenExpiration;
+
+}
+>>>>>>> 790a6f9bb50b4c4f62bd6a5ba0b1123470d8f939
