@@ -5,10 +5,12 @@ import org.springframework.web.bind.annotation.*;
 import br.com.unit.classes.Condutor;
 import br.com.unit.classes.Evento;
 import br.com.unit.service.CondutorService;
+
 import java.util.*;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
+
 
 //POST http://localhost:8080/condutores
 //{
@@ -50,23 +52,28 @@ public class CondutorController {
             condutor.setPerfil(dto.getPerfil());
 
             if (dto.getEventosConduzidos() != null) {
-                java.util.List<Evento> eventos = dto.getEventosConduzidos().stream().map(evId -> {
+                List<Evento> eventos = dto.getEventosConduzidos().stream().map(evId -> {
                     Evento e = new Evento();
                     e.setIdEvento(evId);
                     return e;
                 }).toList();
-                condutor.setEventosConduzidos(new java.util.ArrayList<>(eventos));
+                condutor.setEventosConduzidos(new ArrayList<>(eventos));
             }
 
             condutorService.createCondutor(condutor);
-            return ResponseEntity.status(HttpStatus.CREATED).body("Condutor cadastrado com sucesso: " + condutor.getIdCondutor());
+            return ResponseEntity.status(HttpStatus.CREATED)
+                    .body("Condutor cadastrado com sucesso: " + condutor.getIdCondutor());
+
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
 
     @PutMapping("atualizar/{id}")
-    public ResponseEntity<Object> atualizarCondutor(@PathVariable int id, @RequestBody br.com.unit.dto.CondutorInputDTO dto) {
+    public ResponseEntity<Object> atualizarCondutor(
+            @PathVariable int id,
+            @RequestBody br.com.unit.dto.CondutorInputDTO dto) {
+
         try {
             Condutor condutor = new Condutor();
             condutor.setNome(dto.getNome());
@@ -78,16 +85,17 @@ public class CondutorController {
             condutor.setPerfil(dto.getPerfil());
 
             if (dto.getEventosConduzidos() != null) {
-                java.util.List<Evento> eventos = dto.getEventosConduzidos().stream().map(evId -> {
+                List<Evento> eventos = dto.getEventosConduzidos().stream().map(evId -> {
                     Evento e = new Evento();
                     e.setIdEvento(evId);
                     return e;
                 }).toList();
-                condutor.setEventosConduzidos(new java.util.ArrayList<>(eventos));
+                condutor.setEventosConduzidos(new ArrayList<>(eventos));
             }
 
             condutorService.updateCondutor(id, condutor);
             return ResponseEntity.ok("Condutor com o id: " + id + " atualizado com sucesso!!");
+
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
@@ -100,6 +108,19 @@ public class CondutorController {
             return ResponseEntity.ok("Condutor com ID " + id + " removido com sucesso!");
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
+    }
+
+    @GetMapping("/buscar/email")
+    public ResponseEntity<?> buscarPorEmail(@RequestParam String email) {
+
+        Optional<Condutor> opt = condutorService.buscarPorEmail(email);
+
+        if (opt.isPresent()) {
+            return ResponseEntity.ok(opt.get());
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("Nenhum condutor encontrado com o email: " + email);
         }
     }
 }
