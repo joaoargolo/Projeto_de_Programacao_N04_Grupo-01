@@ -30,6 +30,12 @@
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
 
+ 	    <!-- Spring Session -->
+        <dependency>
+            <groupId>org.springframework.session</groupId>
+            <artifactId>spring-session-core</artifactId>
+        </dependency>
+
         <!-- JPA / HIBERNATE -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
