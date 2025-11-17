@@ -29,8 +29,13 @@ public class EspectadorServiceImpl implements EspectadorService {
 
     @Override
     public boolean autenticar(String email, String senha) {
-
-        return espectadorRepository.existsByEmailAndSenha(email, senha);
+        return espectadorRepository.findByEmail(email)
+                .map(e -> {
+                    System.out.println("Senha digitada: " + senha);
+                    System.out.println("Senha no banco: " + e.getSenha());
+                    return e.getSenha().equals(senha);
+                })
+                .orElse(false);
     }
 
     @Override

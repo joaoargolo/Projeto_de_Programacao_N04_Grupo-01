@@ -25,6 +25,15 @@ public class GerenteServiceImpl implements GerenteService {
         gerenteRepository.save(gerente);
     }
 
+    public boolean autenticar(String email, String senha) {
+        System.out.println("Senha digitada: " + senha);
+        Gerente g = gerenteRepository.findByEmail(email).orElse(null);
+
+        System.out.println("Senha no banco: " + (g != null ? g.getSenha() : "NÃO ACHOU"));
+
+        return g != null && g.getSenha().equals(senha);
+    }
+
     @Override
     public void updateGerente(int id, Gerente gerente) {
         if (!gerenteRepository.existsById(id)) {
