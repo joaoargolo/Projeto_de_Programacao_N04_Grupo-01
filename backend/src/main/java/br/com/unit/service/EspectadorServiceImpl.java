@@ -1,13 +1,14 @@
 package br.com.unit.service;
 
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-import br.com.unit.repository.EspectadorRepository;
-import org.springframework.stereotype.Service;
 import br.com.unit.classes.Espectador;
+import br.com.unit.classes.Evento;
+import br.com.unit.repository.EspectadorRepository;
+import br.com.unit.repository.EventoRepository;
+
+import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 
 @Service
@@ -15,6 +16,10 @@ public class EspectadorServiceImpl implements EspectadorService {
 
     @Autowired
     private EspectadorRepository espectadorRepository;
+
+    @Autowired
+    private EventoRepository eventoRepository;
+
 
     @Override
     public void createEspectador(Espectador espectador) {
@@ -27,22 +32,28 @@ public class EspectadorServiceImpl implements EspectadorService {
         espectadorRepository.save(espectador);
     }
 
+
     @Override
     public boolean autenticar(String email, String senha) {
         return espectadorRepository.findByEmail(email)
-                .map(e -> {
-                    System.out.println("Senha digitada: " + senha);
-                    System.out.println("Senha no banco: " + e.getSenha());
-                    return e.getSenha().equals(senha);
-                })
+                .map(e -> e.getSenha().equals(senha))
                 .orElse(false);
     }
+
 
     @Override
     public Espectador getByEmail(String email) {
         return espectadorRepository.findByEmail(email)
                 .orElseThrow(() -> new IllegalArgumentException("Espectador não encontrado com o email: " + email));
     }
+
+
+    @Override
+    public Espectador buscarPorEmail(String email) {
+        return espectadorRepository.findByEmail(email)
+                .orElseThrow(() -> new IllegalArgumentException("Espectador não encontrado com o email: " + email));
+    }
+
 
     @Override
     public void updateEspectador(int id, Espectador espectador) {
@@ -54,14 +65,42 @@ public class EspectadorServiceImpl implements EspectadorService {
         espectadorRepository.save(espectador);
     }
 
+
     @Override
     public void deleteEspectador(int id) {
         espectadorRepository.deleteById(id);
     }
 
+
     @Override
     public Collection<Espectador> getEspectador() {
-        List<Espectador> espectadores = espectadorRepository.findAll();
-        return espectadores;
+        return espectadorRepository.findAll();
+    }
+
+
+
+    @Override
+    public void participarDeEvento(int idEspectador, int idEvento) {
+        Espectador espectador = espectadorRepository.findById(idEspectador)
+                .orElseThrow(() -> new IllegalArgumentException("Espectador não encontrado!"));
+
+        Evento evento = eventoRepository.findById(idEvento)
+                .orElseThrow(() -> new IllegalArgumentException("Evento não encontrado!"));
+
+        espectador.getEventos().add(evento);
+        espectadorRepository.save(espectador);
+    }
+
+
+    @Override
+    public void sairDoEvento(int idEspectador, int idEvento) {
+        Espectador espectador = espectadorRepository.findById(idEspectador)
+                .orElseThrow(() -> new IllegalArgumentException("Espectador não encontrado!"));
+
+        Evento evento = eventoRepository.findById(idEvento)
+                .orElseThrow(() -> new IllegalArgumentException("Evento não encontrado!"));
+
+        espectador.getEventos().remove(evento);
+        espectadorRepository.save(espectador);
     }
 }

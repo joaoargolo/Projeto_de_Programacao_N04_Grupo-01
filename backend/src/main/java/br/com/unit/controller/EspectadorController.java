@@ -56,4 +56,14 @@ public class EspectadorController {
         espectadorService.deleteEspectador(id);
         return ResponseEntity.ok("Espectador com ID " + id + " removido com sucesso!");
     }
+
+    @GetMapping("/buscar/email")
+    public ResponseEntity<?> buscarPorEmail(@RequestParam String email) {
+        try {
+            Espectador espectador = espectadorService.buscarPorEmail(email);
+            return ResponseEntity.ok(espectador);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
+    }
 }

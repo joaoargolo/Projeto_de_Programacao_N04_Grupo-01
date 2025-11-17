@@ -4,15 +4,22 @@ import java.util.Collection;
 import br.com.unit.classes.Espectador;
 
 public interface EspectadorService {
-    public abstract void createEspectador(Espectador espectador);
 
-    public abstract Espectador getByEmail(String email);
+    void createEspectador(Espectador espectador);
 
-    public abstract void updateEspectador(int id, Espectador espectador);
+    void updateEspectador(int id, Espectador espectador);
 
-    public abstract void deleteEspectador(int id);
+    void deleteEspectador(int id);
 
-    public abstract boolean autenticar(String email, String senha);
+    Collection<Espectador> getEspectador();
 
-    public abstract Collection<Espectador> getEspectador();
+    Espectador buscarPorEmail(String email);
+
+    boolean autenticar(String email, String senha);
+
+    Espectador getByEmail(String email);
+
+    void participarDeEvento(int idEspectador, int idEvento);
+
+    void sairDoEvento(int idEspectador, int idEvento);
 }
