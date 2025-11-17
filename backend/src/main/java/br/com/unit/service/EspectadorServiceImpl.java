@@ -39,6 +39,12 @@ public class EspectadorServiceImpl implements EspectadorService {
     }
 
     @Override
+    public Espectador getByEmail(String email) {
+        return espectadorRepository.findByEmail(email)
+                .orElseThrow(() -> new IllegalArgumentException("Espectador não encontrado com o email: " + email));
+    }
+
+    @Override
     public void updateEspectador(int id, Espectador espectador) {
         if (!espectadorRepository.existsById(id)) {
             throw new IllegalArgumentException("Espectador com ID " + id + " não encontrado!");

@@ -6,6 +6,7 @@ import br.com.unit.classes.Espectador;
 import br.com.unit.service.EspectadorService;
 import java.util.*;
 import br.com.unit.dto.LoginDTO;
+import br.com.unit.dto.PaginaUsuarioDTO;
 import br.com.unit.service.GerenteService;
 import br.com.unit.service.StaffService;
 
@@ -26,19 +27,23 @@ public class LoginController {
     private StaffService staffService;
 
     @PostMapping
-    public ResponseEntity<String> login(@RequestBody LoginDTO loginDTO) {
+    public ResponseEntity<?> login(@RequestBody LoginDTO loginDTO) {
 
-        // tenta autenticar como Espectador
         if (espectadorService.autenticar(loginDTO.email(), loginDTO.senha())) {
-            return ResponseEntity.ok("Login realizado com sucesso! Tipo: ESPECTADOR");
+            Espectador e = espectadorService.getByEmail(loginDTO.email());
+            PaginaUsuarioDTO dto = new PaginaUsuarioDTO();
+            dto.setNome(e.getNome());
+            dto.setCpf(e.getCpf());
+            dto.setFuncao("ESPECTADOR");
+            dto.setDataNascimento(e.getDataNasc());
+
+            return ResponseEntity.ok(dto);
         }
 
-        // tenta autenticar como Gerente
         if (gerenteService.autenticar(loginDTO.email(), loginDTO.senha())) {
             return ResponseEntity.ok("Login realizado com sucesso! Tipo: GERENTE");
         }
 
-        // tenta autenticar como Staff
         if (staffService.autenticar(loginDTO.email(), loginDTO.senha())) {
             return ResponseEntity.ok("Login realizado com sucesso! Tipo: STAFF");
         }
