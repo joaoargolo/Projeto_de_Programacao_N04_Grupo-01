@@ -20,6 +20,9 @@ public class GerenteServiceImpl implements GerenteService {
     @Autowired
     private EventoRepository eventoRepository;
 
+    @Autowired
+    private PasswordService passwordService;
+
     @Override
     @Transactional
     public void createGerente(Gerente gerente) {
@@ -27,6 +30,10 @@ public class GerenteServiceImpl implements GerenteService {
         if (jaExiste) {
             throw new IllegalArgumentException("Já existe um gerente com este e-mail ou CPF!");
         }
+        
+        String senhaCriptografada = passwordService.criptografar(gerente.getSenha());
+        gerente.setSenha(senhaCriptografada);
+       
         if (gerente.getEventosGerenciados() != null && !gerente.getEventosGerenciados().isEmpty()) {
             // validate events
             java.util.List<Evento> eventosValidados = gerente.getEventosGerenciados().stream()
@@ -57,7 +64,16 @@ public class GerenteServiceImpl implements GerenteService {
         gerenteExistente.setNome(gerenteAtualizado.getNome());
         gerenteExistente.setEmail(gerenteAtualizado.getEmail());
         gerenteExistente.setCpf(gerenteAtualizado.getCpf());
-        gerenteExistente.setSenha(gerenteAtualizado.getSenha());
+        
+        if (gerenteAtualizado.getSenha() != null && !gerenteAtualizado.getSenha().isEmpty()) {
+            if (!passwordService.jaEstaCriptografada(gerenteAtualizado.getSenha())) {
+                String senhaCriptografada = passwordService.criptografar(gerenteAtualizado.getSenha());
+                gerenteExistente.setSenha(senhaCriptografada);
+            } else {
+                gerenteExistente.setSenha(gerenteAtualizado.getSenha());
+            }
+        }
+        
         gerenteExistente.setDataNasc(gerenteAtualizado.getDataNasc());
         gerenteExistente.setTelefone(gerenteAtualizado.getTelefone());
         gerenteExistente.setPerfil(gerenteAtualizado.getPerfil());

@@ -40,18 +40,23 @@ public class Evento {
 
     @ManyToMany
     @JoinTable(
-            name = "evento_staff",
-            joinColumns = @JoinColumn(name = "idEvento"),
-            inverseJoinColumns = @JoinColumn(name = "idStaff")
-    )
+    name = "evento_staff",
+    joinColumns = @JoinColumn(name = "idEvento"),
+    inverseJoinColumns = @JoinColumn(name = "idStaff"))
     private List<Staff> staffs;
 
     @ManyToMany
     @JoinTable(
-            name = "evento_condutor",
-            joinColumns = @JoinColumn(name = "idEvento"),
-            inverseJoinColumns = @JoinColumn(name = "idCondutor")
-    )
+    name = "evento_espectador",
+    joinColumns = @JoinColumn(name = "idEvento"),
+    inverseJoinColumns = @JoinColumn(name = "idEspectador"))
+    private List<Espectador> espectadores;
+
+    @ManyToMany
+    @JoinTable(
+    name = "evento_condutor",
+    joinColumns = @JoinColumn(name = "idEvento"),
+    inverseJoinColumns = @JoinColumn(name = "idCondutor"))
     private List<Condutor> condutores;
 
     @ManyToOne

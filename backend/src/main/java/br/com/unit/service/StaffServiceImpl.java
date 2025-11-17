@@ -24,6 +24,9 @@ public class StaffServiceImpl implements StaffService {
     @Autowired
     private EventoRepository eventoRepository;
 
+    @Autowired
+    private PasswordService passwordService;
+
     @Override
     @Transactional
     public void createStaff(Staff staff) {
@@ -31,6 +34,9 @@ public class StaffServiceImpl implements StaffService {
         if (jaExiste) {
             throw new IllegalArgumentException("Já existe um staff com este e-mail ou CPF!");
         }
+        
+        String senhaCriptografada = passwordService.criptografar(staff.getSenha());
+        staff.setSenha(senhaCriptografada);
 
         if (staff.getEventosAuxiliados() != null && !staff.getEventosAuxiliados().isEmpty()) {
             List<Evento> eventosValidados = staff.getEventosAuxiliados().stream().map(e -> 
@@ -72,7 +78,16 @@ public class StaffServiceImpl implements StaffService {
         staffExistente.setNome(staffAtualizado.getNome());
         staffExistente.setEmail(staffAtualizado.getEmail());
         staffExistente.setCpf(staffAtualizado.getCpf());
-        staffExistente.setSenha(staffAtualizado.getSenha());
+        
+        if (staffAtualizado.getSenha() != null && !staffAtualizado.getSenha().isEmpty()) {
+            if (!passwordService.jaEstaCriptografada(staffAtualizado.getSenha())) {
+                String senhaCriptografada = passwordService.criptografar(staffAtualizado.getSenha());
+                staffExistente.setSenha(senhaCriptografada);
+            } else {
+                staffExistente.setSenha(staffAtualizado.getSenha());
+            }
+        }
+        
         staffExistente.setDataNasc(staffAtualizado.getDataNasc());
         staffExistente.setTelefone(staffAtualizado.getTelefone());
         staffExistente.setPerfil(staffAtualizado.getPerfil());
