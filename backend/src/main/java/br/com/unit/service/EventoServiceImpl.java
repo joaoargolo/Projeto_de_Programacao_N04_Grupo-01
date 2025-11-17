@@ -34,32 +34,31 @@ public class EventoServiceImpl implements EventoService {
     @Override
     @Transactional
     public void createEvento(Evento evento) {
-        if (evento.getGerente() == null || evento.getGerente().getIdGerente() == null) {
-            throw new IllegalArgumentException("É necessário associar um gerente ao evento!");
-        }
-
-        Gerente gerente = gerenteRepository.findById(evento.getGerente().getIdGerente()).orElseThrow(() -> new IllegalArgumentException("Gerente não encontrado!"));
-        evento.setGerente(gerente);
-
-        if (evento.getStaffs() != null && !evento.getStaffs().isEmpty()) {
-            List<Staff> staffs = new ArrayList<>();
-            for (Staff staff : evento.getStaffs()) {
-                Staff staffEncontrado = staffRepository.findById(staff.getIdStaff()).orElseThrow(() -> new IllegalArgumentException("Staff com ID " + staff.getIdStaff() + " não encontrado!"));
-                staffs.add(staffEncontrado);
-            }
-            evento.setStaffs(staffs);
-        }
-
         if (evento.getCondutores() != null && !evento.getCondutores().isEmpty()) {
+
             List<Condutor> condutores = new ArrayList<>();
+
             for (Condutor condutor : evento.getCondutores()) {
-                Condutor condutorEncontrado = condutorRepository.findById(condutor.getIdCondutor()).orElseThrow(() -> new IllegalArgumentException("Condutor com ID " + condutor.getIdCondutor() + " não encontrado!"));
+
+                Condutor condutorEncontrado = condutorRepository.findById(condutor.getIdCondutor())
+                        .orElseThrow(() -> new IllegalArgumentException(
+                                "Condutor com ID " + condutor.getIdCondutor() + " não encontrado!"
+                        ));
+
                 condutores.add(condutorEncontrado);
             }
+
             evento.setCondutores(condutores);
+
+            for (Condutor c : condutores) {
+                if (c.getEventosConduzidos() == null) {
+                    c.setEventosConduzidos(new ArrayList<>());
+                }
+                c.getEventosConduzidos().add(evento);
+                condutorRepository.save(c);
+            }
         }
 
-        eventoRepository.save(evento);
     }
 
     @Override

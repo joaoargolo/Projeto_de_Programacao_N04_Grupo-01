@@ -5,12 +5,10 @@ import org.springframework.web.bind.annotation.*;
 import br.com.unit.classes.Condutor;
 import br.com.unit.classes.Evento;
 import br.com.unit.service.CondutorService;
-
 import java.util.*;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
-
 
 //POST http://localhost:8080/condutores
 //{
@@ -22,7 +20,7 @@ import org.springframework.http.HttpStatus;
 //  "telefone": "(81) 97777-1111",
 //  "perfil": "CONDUTOR",
 //  "eventosConduzidos": [
-//    1
+//    { "idEvento": 1 }
 //  ]
 //}
 
@@ -52,28 +50,23 @@ public class CondutorController {
             condutor.setPerfil(dto.getPerfil());
 
             if (dto.getEventosConduzidos() != null) {
-                List<Evento> eventos = dto.getEventosConduzidos().stream().map(evId -> {
+                java.util.List<Evento> eventos = dto.getEventosConduzidos().stream().map(evId -> {
                     Evento e = new Evento();
                     e.setIdEvento(evId);
                     return e;
                 }).toList();
-                condutor.setEventosConduzidos(new ArrayList<>(eventos));
+                condutor.setEventosConduzidos(new java.util.ArrayList<>(eventos));
             }
 
             condutorService.createCondutor(condutor);
-            return ResponseEntity.status(HttpStatus.CREATED)
-                    .body("Condutor cadastrado com sucesso: " + condutor.getIdCondutor());
-
+            return ResponseEntity.status(HttpStatus.CREATED).body("Condutor cadastrado com sucesso: " + condutor.getIdCondutor());
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
 
     @PutMapping("atualizar/{id}")
-    public ResponseEntity<Object> atualizarCondutor(
-            @PathVariable int id,
-            @RequestBody br.com.unit.dto.CondutorInputDTO dto) {
-
+    public ResponseEntity<Object> atualizarCondutor(@PathVariable int id, @RequestBody br.com.unit.dto.CondutorInputDTO dto) {
         try {
             Condutor condutor = new Condutor();
             condutor.setNome(dto.getNome());
@@ -85,17 +78,16 @@ public class CondutorController {
             condutor.setPerfil(dto.getPerfil());
 
             if (dto.getEventosConduzidos() != null) {
-                List<Evento> eventos = dto.getEventosConduzidos().stream().map(evId -> {
+                java.util.List<Evento> eventos = dto.getEventosConduzidos().stream().map(evId -> {
                     Evento e = new Evento();
                     e.setIdEvento(evId);
                     return e;
                 }).toList();
-                condutor.setEventosConduzidos(new ArrayList<>(eventos));
+                condutor.setEventosConduzidos(new java.util.ArrayList<>(eventos));
             }
 
             condutorService.updateCondutor(id, condutor);
             return ResponseEntity.ok("Condutor com o id: " + id + " atualizado com sucesso!!");
-
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
