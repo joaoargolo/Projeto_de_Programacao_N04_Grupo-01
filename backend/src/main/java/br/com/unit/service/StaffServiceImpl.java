@@ -26,6 +26,17 @@ public class StaffServiceImpl implements StaffService {
     }
 
     @Override
+    public boolean autenticar(String email, String senha) {
+        System.out.println("Senha digitada: " + senha);
+
+        Staff s = staffRepository.findByEmail(email).orElse(null);
+
+        System.out.println("Senha no banco: " + (s != null ? s.getSenha() : "NÃO ACHOU"));
+
+        return s != null && s.getSenha().equals(senha);
+    }
+
+    @Override
     public void updateStaff(int id, Staff staff) {
         if (!staffRepository.existsById(id)) {
             throw new IllegalArgumentException("Staff com ID " + id + " não encontrado!");

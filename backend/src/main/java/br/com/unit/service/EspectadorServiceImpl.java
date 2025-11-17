@@ -29,8 +29,19 @@ public class EspectadorServiceImpl implements EspectadorService {
 
     @Override
     public boolean autenticar(String email, String senha) {
+        return espectadorRepository.findByEmail(email)
+                .map(e -> {
+                    System.out.println("Senha digitada: " + senha);
+                    System.out.println("Senha no banco: " + e.getSenha());
+                    return e.getSenha().equals(senha);
+                })
+                .orElse(false);
+    }
 
-        return espectadorRepository.existsByEmailAndSenha(email, senha);
+    @Override
+    public Espectador getByEmail(String email) {
+        return espectadorRepository.findByEmail(email)
+                .orElseThrow(() -> new IllegalArgumentException("Espectador não encontrado com o email: " + email));
     }
 
     @Override
