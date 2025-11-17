@@ -106,4 +106,14 @@ public class StaffController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
+
+    @GetMapping("/buscar/email")
+    public ResponseEntity<?> buscarPorEmail(@RequestParam String email) {
+        Staff staff = service.buscarPorEmail(email);
+        return (staff == null)
+                ? ResponseEntity.notFound().build()
+                : ResponseEntity.ok(staff);
+    }
+}
+
 }
