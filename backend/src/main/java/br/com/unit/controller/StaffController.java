@@ -12,21 +12,6 @@ import br.com.unit.service.StaffService;
 
 import java.util.*;
 
-//POST http://localhost:8080/staff
-//{
-//  "nome": "Luiz",
-//  "cpf": "11122233344",
-//  "email": "luiz@example.com",
-//  "senha": "1234",
-//  "dataNasc": "2005-03-12",
-//  "telefone": "79995634252",
-//  "perfil": "ewrfbhrwevuib",
-//  "especializacao": "mixagem",
-//  "eventosAuxiliados": [
-//    {"idEvento": 1}
-//  ]
-//}
-
 @RestController
 @RequestMapping("/staff")
 public class StaffController {
@@ -34,10 +19,10 @@ public class StaffController {
     @Autowired
     private StaffService staffService;
 
-    private List<Staff> staff = new ArrayList<>();
-
     @GetMapping("/listar")
-    public Collection<Staff> listarStaff() { return staffService.getStaff(); }
+    public Collection<Staff> listarStaff() {
+        return staffService.getStaff();
+    }
 
     @PostMapping("/criar")
     public ResponseEntity<String> criarStaff(@RequestBody StaffInputDTO dto){
@@ -58,7 +43,7 @@ public class StaffController {
                     e.setIdEvento(id);
                     return e;
                 }).toList();
-                staff.setEventosAuxiliados(new java.util.ArrayList<>(eventos));
+                staff.setEventosAuxiliados(new ArrayList<>(eventos));
             }
 
             staffService.createStaff(staff);
@@ -68,7 +53,7 @@ public class StaffController {
         }
     }
 
-    @PutMapping("atualizar/{id}")
+    @PutMapping("/atualizar/{id}")
     public ResponseEntity<Object> atualizarStaff(@PathVariable int id, @RequestBody StaffInputDTO dto) {
         try {
             Staff staff = new Staff();
@@ -87,7 +72,7 @@ public class StaffController {
                     e.setIdEvento(idEv);
                     return e;
                 }).toList();
-                staff.setEventosAuxiliados(new java.util.ArrayList<>(eventos));
+                staff.setEventosAuxiliados(new ArrayList<>(eventos));
             }
 
             staffService.updateStaff(id, staff);
@@ -109,11 +94,9 @@ public class StaffController {
 
     @GetMapping("/buscar/email")
     public ResponseEntity<?> buscarPorEmail(@RequestParam String email) {
-        Staff staff = service.buscarPorEmail(email);
+        Staff staff = staffService.buscarPorEmail(email);
         return (staff == null)
                 ? ResponseEntity.notFound().build()
                 : ResponseEntity.ok(staff);
     }
-}
-
 }

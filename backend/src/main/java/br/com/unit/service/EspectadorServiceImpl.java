@@ -1,7 +1,6 @@
 package br.com.unit.service;
 
 import java.util.Collection;
-import java.util.List;
 
 import br.com.unit.classes.Espectador;
 import br.com.unit.classes.Evento;
@@ -20,7 +19,6 @@ public class EspectadorServiceImpl implements EspectadorService {
     @Autowired
     private EventoRepository eventoRepository;
 
-
     @Override
     public void createEspectador(Espectador espectador) {
         boolean jaExiste = espectadorRepository.existsByEmailOrCpf(espectador.getEmail(), espectador.getCpf());
@@ -32,7 +30,6 @@ public class EspectadorServiceImpl implements EspectadorService {
         espectadorRepository.save(espectador);
     }
 
-
     @Override
     public boolean autenticar(String email, String senha) {
         return espectadorRepository.findByEmail(email)
@@ -40,20 +37,17 @@ public class EspectadorServiceImpl implements EspectadorService {
                 .orElse(false);
     }
 
-
     @Override
     public Espectador getByEmail(String email) {
         return espectadorRepository.findByEmail(email)
                 .orElseThrow(() -> new IllegalArgumentException("Espectador não encontrado com o email: " + email));
     }
 
-
     @Override
     public Espectador buscarPorEmail(String email) {
         return espectadorRepository.findByEmail(email)
                 .orElseThrow(() -> new IllegalArgumentException("Espectador não encontrado com o email: " + email));
     }
-
 
     @Override
     public void updateEspectador(int id, Espectador espectador) {
@@ -65,19 +59,19 @@ public class EspectadorServiceImpl implements EspectadorService {
         espectadorRepository.save(espectador);
     }
 
-
     @Override
     public void deleteEspectador(int id) {
         espectadorRepository.deleteById(id);
     }
-
 
     @Override
     public Collection<Espectador> getEspectador() {
         return espectadorRepository.findAll();
     }
 
-
+    // -------------------------------
+    // PARTICIPAÇÃO EM EVENTOS
+    // -------------------------------
 
     @Override
     public void participarDeEvento(int idEspectador, int idEvento) {
@@ -87,11 +81,11 @@ public class EspectadorServiceImpl implements EspectadorService {
         Evento evento = eventoRepository.findById(idEvento)
                 .orElseThrow(() -> new IllegalArgumentException("Evento não encontrado!"));
 
-        espectador.getEventos().add(evento);
+        espectador.getEventosDoEspectador().add(evento);
+        espectador.atualizarStatus();
+
         espectadorRepository.save(espectador);
     }
-
-
 
     @Override
     public void sairDoEvento(int idEspectador, int idEvento) {
@@ -101,7 +95,9 @@ public class EspectadorServiceImpl implements EspectadorService {
         Evento evento = eventoRepository.findById(idEvento)
                 .orElseThrow(() -> new IllegalArgumentException("Evento não encontrado!"));
 
-        espectador.getEventos().remove(evento);
+        espectador.getEventosDoEspectador().remove(evento);
+        espectador.atualizarStatus();
+
         espectadorRepository.save(espectador);
     }
 }

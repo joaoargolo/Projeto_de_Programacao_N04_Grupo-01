@@ -102,7 +102,7 @@ public class GerenteController {
 
     @GetMapping("/buscar/email")
     public ResponseEntity<?> buscarPorEmail(@RequestParam String email) {
-        Gerente gerente = service.buscarPorEmail(email);
+        Gerente gerente = gerenteService.buscarPorEmail(email);
         return (gerente == null)
                 ? ResponseEntity.notFound().build()
                 : ResponseEntity.ok(gerente);

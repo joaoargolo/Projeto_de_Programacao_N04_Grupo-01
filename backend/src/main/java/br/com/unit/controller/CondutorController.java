@@ -22,7 +22,7 @@ import org.springframework.http.HttpStatus;
 //  "telefone": "(81) 97777-1111",
 //  "perfil": "CONDUTOR",
 //  "eventosConduzidos": [
-//    { "idEvento": 1 }
+//    1
 //  ]
 //}
 
