@@ -99,4 +99,13 @@ public class GerenteController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
+
+    @GetMapping("/buscar/email")
+    public ResponseEntity<?> buscarPorEmail(@RequestParam String email) {
+        Gerente gerente = service.buscarPorEmail(email);
+        return (gerente == null)
+                ? ResponseEntity.notFound().build()
+                : ResponseEntity.ok(gerente);
+    }
+
 }
