@@ -23,7 +23,7 @@ import java.util.*;
 //  "perfil": "ewrfbhrwevuib",
 //  "especializacao": "mixagem",
 //  "eventosAuxiliados": [
-//    {"idEvento": 1}
+//    1
 //  ]
 //}
 
