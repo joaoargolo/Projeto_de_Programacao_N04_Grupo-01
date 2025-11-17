@@ -20,4 +20,5 @@ public interface EspectadorService {
     void participarDeEvento(int idEspectador, int idEvento);
 
     void sairDoEvento(int idEspectador, int idEvento);
+    void ativarEspectador(int id);
 }

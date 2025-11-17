@@ -53,6 +53,17 @@ public class StaffController {
         }
     }
 
+    @PutMapping("/ativar/{id}")
+    public ResponseEntity<String> ativarStaff(@PathVariable int id) {
+        try {
+            staffService.ativarStaff(id);
+            return ResponseEntity.ok("Staff com ID " + id + " ativado com sucesso!");
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
+    }
+
+
     @PutMapping("/atualizar/{id}")
     public ResponseEntity<Object> atualizarStaff(@PathVariable int id, @RequestBody StaffInputDTO dto) {
         try {

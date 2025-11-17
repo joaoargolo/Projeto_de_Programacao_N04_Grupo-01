@@ -18,26 +18,8 @@ public class Espectador extends Pessoa {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idEspectador;
 
-    public enum Status {
-        ATIVO,
-        INATIVO,
-        PENDENTE_DE_CONFIRMACAO
-    }
-
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private Status status = Status.INATIVO;
-
     @ManyToMany(mappedBy = "espectadores")
     private List<Evento> eventosDoEspectador;
-
-    public void atualizarStatus() {
-        if (eventosDoEspectador == null || eventosDoEspectador.isEmpty()) {
-            this.status = Status.INATIVO;
-        } else {
-            this.status = Status.ATIVO;
-        }
-    }
 
     public void cadastrarEvento() {
         System.out.println("O usuário foi cadastrado no evento.");

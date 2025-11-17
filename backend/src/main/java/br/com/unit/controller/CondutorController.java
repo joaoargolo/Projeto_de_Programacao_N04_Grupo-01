@@ -65,6 +65,17 @@ public class CondutorController {
         }
     }
 
+    @PutMapping("/ativar/{id}")
+    public ResponseEntity<String> ativarCondutor(@PathVariable int id) {
+        try {
+            condutorService.ativarCondutor(id);
+            return ResponseEntity.ok("Condutor com ID " + id + " ativado com sucesso!");
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
+    }
+
+
     @PutMapping("atualizar/{id}")
     public ResponseEntity<Object> atualizarCondutor(@PathVariable int id, @RequestBody br.com.unit.dto.CondutorInputDTO dto) {
         try {

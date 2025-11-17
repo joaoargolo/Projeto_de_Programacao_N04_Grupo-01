@@ -11,4 +11,5 @@ public interface CondutorService {
     public abstract void deleteCondutor(int id);
     public abstract Collection<Condutor> getCondutor();
     Optional<Condutor> buscarPorEmail(String email);
+    void ativarCondutor(int id);
 }

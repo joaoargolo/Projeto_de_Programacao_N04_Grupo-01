@@ -32,6 +32,17 @@ public class EspectadorController {
         }
     }
 
+    @PutMapping("/ativar/{id}")
+    public ResponseEntity<String> ativarEspectador(@PathVariable int id) {
+        try {
+            espectadorService.ativarEspectador(id);
+            return ResponseEntity.ok("Espectador com ID " + id + " ativado com sucesso!");
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
+    }
+
+
     @PutMapping("atualizar/{id}")
     public ResponseEntity<Object> atualizarEspectador(@PathVariable int id, @RequestBody Espectador espectador) {
         try {

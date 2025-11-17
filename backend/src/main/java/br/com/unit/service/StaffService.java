@@ -9,4 +9,5 @@ public interface StaffService {
     void deleteStaff(int id);
     Collection<Staff> getStaff();
     Staff buscarPorEmail(String email);
+    void ativarStaff(int id);
 }

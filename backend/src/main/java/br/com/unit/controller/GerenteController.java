@@ -62,6 +62,17 @@ public class GerenteController {
         return gerenteService.getGerente();
     }
 
+    @PutMapping("/ativar/{id}")
+    public ResponseEntity<String> ativarGerente(@PathVariable int id) {
+        try {
+            gerenteService.ativarGerente(id);
+            return ResponseEntity.ok("Gerente com ID " + id + " ativado com sucesso!");
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
+    }
+
+
     @PutMapping("atualizar/{id}")
     public ResponseEntity<Object> atualizarGerente(@PathVariable int id, @RequestBody br.com.unit.dto.GerenteInputDTO dto) {
         try {

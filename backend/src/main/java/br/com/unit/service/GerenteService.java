@@ -9,4 +9,5 @@ public interface GerenteService {
     void deleteGerente(int id);
     Collection<Gerente> getGerente();
     Gerente buscarPorEmail(String email);
+    void ativarGerente(int id);
 }
