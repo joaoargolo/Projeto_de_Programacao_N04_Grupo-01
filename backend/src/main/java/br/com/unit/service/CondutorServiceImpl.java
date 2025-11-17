@@ -1,9 +1,8 @@
 package br.com.unit.service;
 
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.Optional;
 
 import br.com.unit.repository.CondutorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +14,6 @@ public class CondutorServiceImpl implements CondutorService {
 
     @Autowired
     private CondutorRepository condutorRepository;
-
 
     @Override
     public void createCondutor(Condutor condutor){
@@ -45,12 +43,11 @@ public class CondutorServiceImpl implements CondutorService {
 
     @Override
     public Collection<Condutor> getCondutor() {
-        List<Condutor> condutores = condutorRepository.findAll();
-        return condutores;
+        return condutorRepository.findAll();
     }
 
     @Override
-    public void setId(int id, Condutor condutor) {
-        condutor.setIdCondutor(id);
+    public Optional<Condutor> buscarPorEmail(String email) {
+        return condutorRepository.findByEmail(email);
     }
 }
