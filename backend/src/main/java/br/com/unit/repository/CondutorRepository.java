@@ -13,6 +13,7 @@ public interface CondutorRepository extends JpaRepository<Condutor, Integer> {
 
     Optional<Condutor> findByCpf(String cpf);
 
+
     boolean existsByEmailOrCpf(String email, String cpf);
 }
 
