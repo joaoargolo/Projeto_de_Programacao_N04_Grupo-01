@@ -6,6 +6,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.DatePicker;
+import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.collections.FXCollections;
 import javafx.stage.Stage;
@@ -29,13 +30,13 @@ public class Controller {
     private TextField EmailLoginField;
 
     @FXML
-    private TextField SenhaLoginField;
+    private PasswordField SenhaLoginField;
 
     @FXML
     private TextField EmailCadastroField;
 
     @FXML
-    private TextField SenhaCadastroField;
+    private PasswordField SenhaCadastroField;
 
     @FXML
     private TextField CpfField;
@@ -103,7 +104,8 @@ public class Controller {
             EmailCadastroField.setStyle("-fx-border-color : red");
             return;
         } else if (!Validador.validarSenha(senha)) {
-            SenhaCadastroField.setText("Senha inválida!");
+            SenhaCadastroField.setText(
+                    "Senha deve ter ao menos 8 caracteres, uma letra maiúscula, um número e um caractere especial!");
             SenhaCadastroField.setStyle("-fx-border-color : red");
             return;
         } else if (!Validador.validarCPF(cpf)) {
