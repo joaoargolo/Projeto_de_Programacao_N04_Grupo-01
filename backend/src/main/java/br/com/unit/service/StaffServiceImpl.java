@@ -74,13 +74,12 @@ public class StaffServiceImpl implements StaffService {
 
     @Override
     public boolean autenticar(String email, String senha) {
-        System.out.println("Senha digitada: " + senha);
+        return staffRepository.findByEmail(email)
+                .map(s -> {
 
-        Staff s = staffRepository.findByEmail(email).orElse(null);
-
-        System.out.println("Senha no banco: " + (s != null ? s.getSenha() : "NÃO ACHOU"));
-
-        return s != null && s.getSenha().equals(senha);
+                    return passwordService.verificar(senha, s.getSenha());
+                })
+                .orElse(false);
     }
 
     @Override

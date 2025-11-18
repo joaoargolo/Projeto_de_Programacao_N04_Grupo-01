@@ -44,8 +44,6 @@ public class EspectadorServiceImpl implements EspectadorService {
     public boolean autenticar(String email, String senha) {
         return espectadorRepository.findByEmail(email)
                 .map(e -> {
-                    System.out.println("Senha digitada: " + senha);
-                    System.out.println("Senha no banco: " + e.getSenha());
 
                     return passwordService.verificar(senha, e.getSenha());
                 })

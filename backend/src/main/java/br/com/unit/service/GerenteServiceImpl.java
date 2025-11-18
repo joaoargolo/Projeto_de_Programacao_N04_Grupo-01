@@ -30,14 +30,16 @@ public class GerenteServiceImpl implements GerenteService {
         if (jaExiste) {
             throw new IllegalArgumentException("Já existe um gerente com este e-mail ou CPF!");
         }
-        
+
         String senhaCriptografada = passwordService.criptografar(gerente.getSenha());
         gerente.setSenha(senhaCriptografada);
-       
+
         if (gerente.getEventosGerenciados() != null && !gerente.getEventosGerenciados().isEmpty()) {
             // validate events
             java.util.List<Evento> eventosValidados = gerente.getEventosGerenciados().stream()
-                    .map(e -> eventoRepository.findById(e.getIdEvento()).orElseThrow(() -> new IllegalArgumentException("Evento com ID " + e.getIdEvento() + " não encontrado!")))
+                    .map(e -> eventoRepository.findById(e.getIdEvento())
+                            .orElseThrow(() -> new IllegalArgumentException(
+                                    "Evento com ID " + e.getIdEvento() + " não encontrado!")))
                     .toList();
 
             gerente.setEventosGerenciados(new java.util.ArrayList<>(eventosValidados));
@@ -56,13 +58,14 @@ public class GerenteServiceImpl implements GerenteService {
         gerenteRepository.save(gerente);
     }
 
+    @Override
     public boolean autenticar(String email, String senha) {
-        System.out.println("Senha digitada: " + senha);
-        Gerente g = gerenteRepository.findByEmail(email).orElse(null);
+        return gerenteRepository.findByEmail(email)
+                .map(g -> {
 
-        System.out.println("Senha no banco: " + (g != null ? g.getSenha() : "NÃO ACHOU"));
-
-        return g != null && g.getSenha().equals(senha);
+                    return passwordService.verificar(senha, g.getSenha());
+                })
+                .orElse(false);
     }
 
     @Override
@@ -74,12 +77,13 @@ public class GerenteServiceImpl implements GerenteService {
     @Override
     @Transactional
     public void updateGerente(int id, Gerente gerenteAtualizado) {
-        Gerente gerenteExistente = gerenteRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Gerente com ID " + id + " não encontrado!"));
+        Gerente gerenteExistente = gerenteRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Gerente com ID " + id + " não encontrado!"));
 
         gerenteExistente.setNome(gerenteAtualizado.getNome());
         gerenteExistente.setEmail(gerenteAtualizado.getEmail());
         gerenteExistente.setCpf(gerenteAtualizado.getCpf());
-        
+
         if (gerenteAtualizado.getSenha() != null && !gerenteAtualizado.getSenha().isEmpty()) {
             if (!passwordService.jaEstaCriptografada(gerenteAtualizado.getSenha())) {
                 String senhaCriptografada = passwordService.criptografar(gerenteAtualizado.getSenha());
@@ -88,7 +92,7 @@ public class GerenteServiceImpl implements GerenteService {
                 gerenteExistente.setSenha(gerenteAtualizado.getSenha());
             }
         }
-        
+
         gerenteExistente.setDataNasc(gerenteAtualizado.getDataNasc());
         gerenteExistente.setTelefone(gerenteAtualizado.getTelefone());
         gerenteExistente.setPerfil(gerenteAtualizado.getPerfil());
@@ -98,17 +102,24 @@ public class GerenteServiceImpl implements GerenteService {
             java.util.List<Evento> eventosValidados = gerenteAtualizado.getEventosGerenciados().isEmpty()
                     ? java.util.Collections.emptyList()
                     : gerenteAtualizado.getEventosGerenciados().stream()
-                    .map(e -> eventoRepository.findById(e.getIdEvento()).orElseThrow(() -> new IllegalArgumentException("Evento com ID " + e.getIdEvento() + " não encontrado!")))
-                    .toList();
+                            .map(e -> eventoRepository.findById(e.getIdEvento())
+                                    .orElseThrow(() -> new IllegalArgumentException(
+                                            "Evento com ID " + e.getIdEvento() + " não encontrado!")))
+                            .toList();
 
             java.util.List<Evento> eventosAntigos = gerenteExistente.getEventosGerenciados();
-            if (eventosAntigos == null) eventosAntigos = java.util.Collections.emptyList();
+            if (eventosAntigos == null)
+                eventosAntigos = java.util.Collections.emptyList();
 
             java.util.Set<Integer> oldIds = new java.util.HashSet<>();
-            for (Evento ev : eventosAntigos) if (ev.getIdEvento() != null) oldIds.add(ev.getIdEvento());
+            for (Evento ev : eventosAntigos)
+                if (ev.getIdEvento() != null)
+                    oldIds.add(ev.getIdEvento());
 
             java.util.Set<Integer> newIds = new java.util.HashSet<>();
-            for (Evento ev : eventosValidados) if (ev.getIdEvento() != null) newIds.add(ev.getIdEvento());
+            for (Evento ev : eventosValidados)
+                if (ev.getIdEvento() != null)
+                    newIds.add(ev.getIdEvento());
 
             // remove gerente from old events not in new set
             for (Evento evAnt : eventosAntigos) {
