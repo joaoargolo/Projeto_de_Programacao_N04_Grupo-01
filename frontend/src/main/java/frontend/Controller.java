@@ -57,6 +57,7 @@ public class Controller {
         listaFuncoes.add("Espectador");
         listaFuncoes.add("Gerente");
         listaFuncoes.add("Staff");
+        listaFuncoes.add("Condutor");
 
         FuncaoCadastroField.setItems(FXCollections.observableArrayList(listaFuncoes));
     }
