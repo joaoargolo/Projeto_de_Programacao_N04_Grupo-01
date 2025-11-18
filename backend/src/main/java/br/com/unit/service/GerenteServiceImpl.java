@@ -1,57 +1,83 @@
 package br.com.unit.service;
 
-import br.com.unit.classes.Gerente;
-import br.com.unit.repository.GerenteRepository;
+import java.util.Collection;
+
+import br.com.unit.classes.Pessoa;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Collection;
-import java.util.List;
+import br.com.unit.classes.Gerente;
+import br.com.unit.repository.GerenteRepository;
 
 @Service
 public class GerenteServiceImpl implements GerenteService {
 
     @Autowired
-    private GerenteRepository gerenteRepository;
+    private GerenteRepository repository;
+
+    @Autowired
+    private PasswordService passwordService;
 
     @Override
     public void createGerente(Gerente gerente) {
-        boolean jaExiste = gerenteRepository.existsByEmailOrCpf(gerente.getEmail(), gerente.getCpf());
+        gerente.atualizarStatusAutomaticamente();
+        repository.save(gerente);
+    }
 
-        if (jaExiste) {
-            throw new IllegalArgumentException("Já existe um gerente com este e-mail ou CPF!");
+    @Override
+    public void ativarGerente(int id) {
+        Gerente gerente = repository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Gerente não encontrado!"));
+
+        if (gerente.getNome() != null && gerente.getCpf() != null
+                && gerente.getEmail() != null && gerente.getSenha() != null
+                && gerente.getDataNasc() != null) {
+
+            gerente.setStatus(Pessoa.Status.ATIVO);
+        } else {
+            gerente.setStatus(Pessoa.Status.PENDENTE_DE_CONFIRMACAO);
         }
 
-        gerenteRepository.save(gerente);
+        repository.save(gerente);
     }
 
-    public boolean autenticar(String email, String senha) {
-        System.out.println("Senha digitada: " + senha);
-        Gerente g = gerenteRepository.findByEmail(email).orElse(null);
-
-        System.out.println("Senha no banco: " + (g != null ? g.getSenha() : "NÃO ACHOU"));
-
-        return g != null && g.getSenha().equals(senha);
-    }
 
     @Override
     public void updateGerente(int id, Gerente gerente) {
-        if (!gerenteRepository.existsById(id)) {
-            throw new IllegalArgumentException("Gerente com ID " + id + " não encontrado!");
-        }
+        Gerente existente = repository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Gerente não encontrado!"));
 
-        gerente.setIdGerente(id);
-        gerenteRepository.save(gerente);
+        existente.setNome(gerente.getNome());
+        existente.setCpf(gerente.getCpf());
+        existente.setEmail(gerente.getEmail());
+        existente.setSenha(gerente.getSenha());
+        existente.setDataNasc(gerente.getDataNasc());
+        existente.setTelefone(gerente.getTelefone());
+        existente.setPerfil(gerente.getPerfil());
+
+        existente.atualizarStatusAutomaticamente();
+
+        repository.save(existente);
     }
+
 
     @Override
     public void deleteGerente(int id) {
-        gerenteRepository.deleteById(id);
+        Gerente gerente = repository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Gerente não encontrado!"));
+
+        gerente.desativar();
+        repository.save(gerente);
     }
+
 
     @Override
     public Collection<Gerente> getGerente() {
-        List<Gerente> gerentes = gerenteRepository.findAll();
-        return gerentes;
+        return repository.findAll();
+    }
+
+    @Override
+    public Gerente buscarPorEmail(String email) {
+        return repository.findByEmail(email).orElse(null);
     }
 }

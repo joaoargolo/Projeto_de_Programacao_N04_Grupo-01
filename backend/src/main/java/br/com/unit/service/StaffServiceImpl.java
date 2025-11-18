@@ -1,59 +1,64 @@
 package br.com.unit.service;
 
-import br.com.unit.classes.Staff;
-import br.com.unit.repository.StaffRepository;
+import java.util.Collection;
+
+import br.com.unit.classes.Pessoa;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Collection;
-import java.util.List;
+import br.com.unit.classes.Staff;
+import br.com.unit.repository.StaffRepository;
 
 @Service
 public class StaffServiceImpl implements StaffService {
 
     @Autowired
-    private StaffRepository staffRepository;
+    private StaffRepository repository;
+
+    @Autowired
+    private PasswordService passwordService;
 
     @Override
     public void createStaff(Staff staff) {
-        boolean jaExiste = staffRepository.existsByEmailOrCpf(staff.getEmail(), staff.getCpf());
-
-        if (jaExiste) {
-            throw new IllegalArgumentException("Já existe um staff com este e-mail ou CPF!");
-        }
-
-        staffRepository.save(staff);
-    }
-
-    @Override
-    public boolean autenticar(String email, String senha) {
-        System.out.println("Senha digitada: " + senha);
-
-        Staff s = staffRepository.findByEmail(email).orElse(null);
-
-        System.out.println("Senha no banco: " + (s != null ? s.getSenha() : "NÃO ACHOU"));
-
-        return s != null && s.getSenha().equals(senha);
+        repository.save(staff);
     }
 
     @Override
     public void updateStaff(int id, Staff staff) {
-        if (!staffRepository.existsById(id)) {
-            throw new IllegalArgumentException("Staff com ID " + id + " não encontrado!");
-        }
-
         staff.setIdStaff(id);
-        staffRepository.save(staff);
+        repository.save(staff);
     }
 
     @Override
     public void deleteStaff(int id) {
-        staffRepository.deleteById(id);
+        repository.deleteById(id);
     }
 
     @Override
     public Collection<Staff> getStaff() {
-        List<Staff> staffList = staffRepository.findAll();
-        return staffList;
+        return repository.findAll();
     }
+
+    @Override
+    public Staff buscarPorEmail(String email) {
+        return repository.findByEmail(email).orElse(null);
+    }
+
+    @Override
+    public void ativarStaff(int id) {
+        Staff staff = repository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Staff não encontrado!"));
+
+        if (staff.getNome() != null && staff.getCpf() != null
+                && staff.getEmail() != null && staff.getSenha() != null
+                && staff.getDataNasc() != null) {
+
+            staff.setStatus(Pessoa.Status.ATIVO);
+        } else {
+            staff.setStatus(Pessoa.Status.PENDENTE_DE_CONFIRMACAO);
+        }
+
+        repository.save(staff);
+    }
+
 }

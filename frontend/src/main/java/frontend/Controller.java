@@ -1,5 +1,7 @@
 package frontend;
 
+import java.util.List;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 import javafx.fxml.FXML;
@@ -8,14 +10,13 @@ import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.stage.Stage;
 import javafx.scene.Parent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import service.CadastroService;
 
 public class Controller {
-
     @FXML
     private Button EntrarBotao;
 
@@ -52,10 +53,8 @@ public class Controller {
     public void initialize() {
         ArrayList<String> listaFuncoes = new ArrayList<>();
 
-        // funcoes disponiveis, da p mudar depois(obviamente)
-        listaFuncoes.add("Espectador");
-        listaFuncoes.add("Gerente");
-        listaFuncoes.add("Staff");
+        listaFuncoes.add("Teste1");
+        listaFuncoes.add("Teste2");
 
         FuncaoCadastroField.setItems(FXCollections.observableArrayList(listaFuncoes));
     }
@@ -81,95 +80,56 @@ public class Controller {
 
     @FXML
     protected void CadastroClick() {
+
         listCadastroFields.clear();
 
         String nome = NomeCadastroField.getText();
-        String email = EmailCadastroField.getText();
-        String senha = SenhaCadastroField.getText();
-        String cpf = CpfField.getText();
-        String funcao = FuncaoCadastroField.getValue();
-        String dataNasc = (DataNascField.getValue() != null) ? DataNascField.getValue().toString() : "";
+        listCadastroFields.add(NomeCadastroField.getText());
+        listCadastroFields.add(EmailCadastroField.getText());
+        listCadastroFields.add(SenhaCadastroField.getText());
+        listCadastroFields.add(CpfField.getText());
+        listCadastroFields.add(FuncaoCadastroField.getValue());
+        listCadastroFields.add(
+                (DataNascField.getValue() != null) ? DataNascField.getValue().toString() : "");
 
-        if (nome.isEmpty() || email.isEmpty() || senha.isEmpty() || cpf.isEmpty() || funcao == null
-                || dataNasc.isEmpty()) {
-            System.out.println("Campo vazio detectado!");
-            NomeCadastroField.setText("Nenhum campo pode estar vazio");
-            NomeCadastroField.setStyle("-fx-border-color : red");
-            return;
+        System.out.println("Botão clicado!");
+        System.out.println(nome.length());
+
+        for (String Campo : listCadastroFields) {
+            if (Campo == null || Campo.isEmpty()) {
+                System.out.println("Campo vazio detectado!");
+                NomeCadastroField.setText("Valor inválido! , nenhum campo pode estar vazio");
+                NomeCadastroField.setStyle("-fx-border-color : red");
+                return;
+            }
         }
-
-        if (!Validador.validarEmail(email)) {
+        if (!Validador.validarEmail(EmailCadastroField.getText())) {
             EmailCadastroField.setText("Email inválido!");
             EmailCadastroField.setStyle("-fx-border-color : red");
             return;
-        } else if (!Validador.validarSenha(senha)) {
+        } else if (!Validador.validarSenha(SenhaCadastroField.getText())) {
             SenhaCadastroField.setText("Senha inválida!");
             SenhaCadastroField.setStyle("-fx-border-color : red");
             return;
-        } else if (!Validador.validarCPF(cpf)) {
+        } else if (!Validador.validarCPF(CpfField.getText())) {
             CpfField.setText("CPF inválido!");
             CpfField.setStyle("-fx-border-color : red");
             return;
         }
-        switch (funcao) {
-            case "Espectador" -> {
-                try {
-                    var response = CadastroService.postCadastro(nome, cpf, email, senha, dataNasc, "espectador");
-                    if (response.statusCode() == 200 || response.statusCode() == 201) {
-                        System.out.println("Cadastro de espectador realizado com sucesso!");
-                        IrParaLogin();
-                        LimparFields();
-                    } else {
-                        System.out.println("Erro ao cadastrar espectador: " + response.body());
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-            case "Gerente" -> {
-                try {
-                    var response = CadastroService.postCadastro(nome, cpf, email, senha, dataNasc, "gerente");
-                    if (response.statusCode() == 200 || response.statusCode() == 201) {
-                        System.out.println("Cadastro de gerente realizado com sucesso!");
-                        IrParaLogin();
-                        LimparFields();
-                    } else {
-                        System.out.println("Erro ao cadastrar gerente: " + response.body());
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-            case "Staff" -> {
-                try {
-                    var response = CadastroService.postCadastroStaff(
-                            nome, cpf, email, senha, dataNasc,
-                            "Especialização padrão", "Evento X");
-                    if (response.statusCode() == 200 || response.statusCode() == 201) {
-                        System.out.println("Cadastro de staff realizado com sucesso!");
-                        IrParaLogin();
-                        LimparFields();
-                    } else {
-                        System.out.println("Erro ao cadastrar staff: " + response.body());
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-            default -> System.out.println("Função inválida!");
-        }
+
+        System.out.println("Todos os campos preenchidos!");
+        IrParaLogin();
+        LimparFields();
     }
 
     @FXML
     protected void EntrarClick() {
         String email = EmailLoginField.getText();
         String senha = SenhaLoginField.getText();
-
         if (email.isEmpty() || senha.isEmpty()) {
             System.out.println("Por favor, preencha todos os campos.");
             return;
         }
-
         System.out.println("Botão de login clicado!");
         EmailLoginField.clear();
         SenhaLoginField.clear();
