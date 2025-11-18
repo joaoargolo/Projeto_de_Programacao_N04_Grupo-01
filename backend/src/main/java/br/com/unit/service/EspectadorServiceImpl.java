@@ -46,7 +46,8 @@ public class EspectadorServiceImpl implements EspectadorService {
                 .map(e -> {
                     System.out.println("Senha digitada: " + senha);
                     System.out.println("Senha no banco: " + e.getSenha());
-                    return e.getSenha().equals(senha);
+
+                    return passwordService.verificar(senha, e.getSenha());
                 })
                 .orElse(false);
     }
