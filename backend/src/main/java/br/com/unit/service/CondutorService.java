@@ -13,4 +13,6 @@ public interface CondutorService {
     public abstract Collection<Condutor> getCondutor();
     Optional<Condutor> buscarPorEmail(String email);
     void ativarCondutor(int id);
+    public abstract Condutor getByEmail(String email);
+    public abstract boolean autenticar(String email, String senha);
 }

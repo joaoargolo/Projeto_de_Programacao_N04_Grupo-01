@@ -196,4 +196,20 @@ public class CondutorServiceImpl implements CondutorService {
         condutorRepository.save(condutor);
     }
 
+    @Override
+    public Condutor getByEmail(String email) {
+        return condutorRepository.findByEmail(email)
+                .orElseThrow(() -> new IllegalArgumentException("Condutor não encontrado com o email: " + email));
+    }
+
+    @Override
+    public boolean autenticar(String email, String senha) {
+        return condutorRepository.findByEmail(email)
+                .map(c -> {
+
+                    return passwordService.verificar(senha, c.getSenha());
+                })
+                .orElse(false);
+    }
+
 }
