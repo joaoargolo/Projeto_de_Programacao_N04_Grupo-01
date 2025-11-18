@@ -1,12 +1,19 @@
 package br.com.unit.service;
 
-import br.com.unit.classes.*;
-import br.com.unit.repository.*;
+import br.com.unit.classes.Condutor;
+import br.com.unit.classes.Espectador;
+import br.com.unit.classes.Gerente;
+import br.com.unit.classes.PasswordResetToken;
+import br.com.unit.classes.Staff;
+import br.com.unit.repository.CondutorRepository;
+import br.com.unit.repository.EspectadorRepository;
+import br.com.unit.repository.GerenteRepository;
+import br.com.unit.repository.PasswordResetTokenRepository;
+import br.com.unit.repository.StaffRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -18,6 +25,10 @@ public class PasswordResetService {
     private final GerenteRepository gerenteRepo;
     private final CondutorRepository condutorRepo;
     private final StaffRepository staffRepo;
+    private final PasswordService passwordService;
+    private final EmailService emailService;
+
+
 
     public String gerarToken(Integer userId, String tipo) {
 
@@ -34,6 +45,7 @@ public class PasswordResetService {
         return token.getToken();
     }
 
+
     public Object validarToken(String tokenStr) {
         PasswordResetToken token = tokenRepo.findByToken(tokenStr)
                 .orElseThrow(() -> new RuntimeException("Token inválido"));
@@ -44,6 +56,7 @@ public class PasswordResetService {
 
         return buscarUsuario(token.getUsuarioId(), token.getUsuarioTipo());
     }
+
 
     public void resetarSenha(String tokenStr, String novaSenha) {
 
@@ -56,10 +69,12 @@ public class PasswordResetService {
 
         Object usuario = buscarUsuario(token.getUsuarioId(), token.getUsuarioTipo());
 
-        if (usuario instanceof Espectador u) u.setSenha(novaSenha);
-        if (usuario instanceof Gerente u) u.setSenha(novaSenha);
-        if (usuario instanceof Condutor u) u.setSenha(novaSenha);
-        if (usuario instanceof Staff u) u.setSenha(novaSenha);
+        String senhaCriptografada = passwordService.criptografar(novaSenha);
+
+        if (usuario instanceof Espectador u) u.setSenha(senhaCriptografada);
+        if (usuario instanceof Gerente u) u.setSenha(senhaCriptografada);
+        if (usuario instanceof Condutor u) u.setSenha(senhaCriptografada);
+        if (usuario instanceof Staff u) u.setSenha(senhaCriptografada);
 
         salvarUsuario(usuario);
 
@@ -79,6 +94,7 @@ public class PasswordResetService {
             default -> throw new RuntimeException("Tipo desconhecido");
         };
     }
+
 
     private void salvarUsuario(Object usuario) {
         if (usuario instanceof Espectador u) espectadorRepo.save(u);

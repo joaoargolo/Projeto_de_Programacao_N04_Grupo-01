@@ -3,12 +3,13 @@ package br.com.unit.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import br.com.unit.classes.Espectador;
+import br.com.unit.classes.Gerente;
+import br.com.unit.classes.Staff;
 import br.com.unit.service.EspectadorService;
-import java.util.*;
-import br.com.unit.dto.LoginDTO;
-import br.com.unit.dto.PaginaUsuarioDTO;
 import br.com.unit.service.GerenteService;
 import br.com.unit.service.StaffService;
+import br.com.unit.dto.LoginDTO;
+import br.com.unit.dto.PaginaUsuarioDTO;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
@@ -31,6 +32,7 @@ public class LoginController {
 
         if (espectadorService.autenticar(loginDTO.email(), loginDTO.senha())) {
             Espectador e = espectadorService.getByEmail(loginDTO.email());
+
             PaginaUsuarioDTO dto = new PaginaUsuarioDTO();
             dto.setNome(e.getNome());
             dto.setCpf(e.getCpf());
@@ -40,14 +42,16 @@ public class LoginController {
             return ResponseEntity.ok(dto);
         }
 
-        if (gerenteService.autenticar(loginDTO.email(), loginDTO.senha())) {
+        Gerente gerente = gerenteService.buscarPorEmail(loginDTO.email());
+        if (gerente != null && gerente.getSenha().equals(loginDTO.senha())) {
             return ResponseEntity.ok("Login realizado com sucesso! Tipo: GERENTE");
         }
 
-        if (staffService.autenticar(loginDTO.email(), loginDTO.senha())) {
+        Staff staff = staffService.buscarPorEmail(loginDTO.email());
+        if (staff != null && staff.getSenha().equals(loginDTO.senha())) {
             return ResponseEntity.ok("Login realizado com sucesso! Tipo: STAFF");
         }
 
-        return ResponseEntity.status(401).body("Email ou senha incorretos");
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Email ou senha incorretos");
     }
 }

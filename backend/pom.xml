@@ -13,10 +13,8 @@
     </parent>
 
     <groupId>br.com.example.unit</groupId>
-    <artifactId>Projeto_de_Programa-o_N04_Grupo-01</artifactId>
+    <artifactId>Projeto_de_Programacao_N04_Grupo-01</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>Projeto_de_Programa-o_N04_Grupo-01</name>
-    <description>Projeto de Programação N04 - Grupo 01</description>
 
     <properties>
         <java.version>17</java.version>
@@ -27,22 +25,28 @@
         <!-- WEB -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+
+        <!-- SECURITY -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-security</artifactId>
         </dependency>
 
-        <!-- BCrypt Encoder -->
+        <!-- MAIL (REQUERIDO PARA ENVIAR EMAIL) -->
         <dependency>
-            <groupId>org.springframework.security</groupId>
-            <artifactId>spring-security-crypto</artifactId>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-mail</artifactId>
         </dependency>
 
- 	    <!-- Spring Session -->
+        <!-- SESSION -->
         <dependency>
             <groupId>org.springframework.session</groupId>
             <artifactId>spring-session-core</artifactId>
         </dependency>
 
-        <!-- JPA / HIBERNATE -->
+        <!-- JPA -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
@@ -56,20 +60,20 @@
             <scope>runtime</scope>
         </dependency>
 
-        <!-- Lombok (gera getters, setters, construtores, etc.) -->
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <version>1.18.34</version>
-        </dependency>
-
-        <!-- Spring Security Crypto (BCrypt) -->
+        <!-- BCrypt -->
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-crypto</artifactId>
         </dependency>
 
-        <!-- Ferramentas de desenvolvimento -->
+        <!-- Lombok -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <optional>true</optional>
+        </dependency>
+
+        <!-- Dev tools -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-devtools</artifactId>
@@ -77,7 +81,7 @@
             <optional>true</optional>
         </dependency>
 
-        <!-- Testes -->
+        <!-- Test -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
@@ -86,18 +90,10 @@
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-security</artifactId>
-        </dependency>
-
-
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
+            <artifactId>spring-boot-starter-mail</artifactId>
         </dependency>
 
     </dependencies>
-
-
 
     <build>
         <plugins>
