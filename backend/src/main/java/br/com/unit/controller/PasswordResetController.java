@@ -52,11 +52,23 @@ public class PasswordResetController {
         }
 
         String token = passwordResetService.gerarToken(userId, tipo);
-
         String link = "http://localhost:8080/password/reset?token=" + token;
 
-        return "Token gerado com sucesso! Link: " + link +
-                " - Use este link para redefinir sua senha.";
+        // Tenta enviar o token por e-mail ao usuário
+        try {
+            String assunto = "Recuperação de senha";
+            String texto = "Você solicitou a redefinição de senha.\n\n" +
+                    "Use o token abaixo para redefinir sua senha: \n" + token + "\n\n" +
+                    "Ou clique no link: " + link + "\n\n" +
+                    "Este token expira em 30 minutos.";
+
+            emailService.enviarEmail(email, assunto, texto);
+        } catch (Exception e) {
+            // Em caso de falha no envio, devolve o link na resposta para testes
+            return "Token gerado, mas falha ao enviar e-mail: " + e.getMessage() + "\nLink: " + link;
+        }
+
+        return "Token gerado e enviado por e-mail com sucesso.";
     }
 
     @PostMapping("/reset")

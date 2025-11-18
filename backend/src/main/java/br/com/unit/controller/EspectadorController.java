@@ -9,6 +9,17 @@ import java.util.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
 
+//POST http://localhost:8080/espectadores
+//{
+//  "nome": "Alan Rocha",
+//  "cpf": "12345678900",
+//  "email": "alan@example.com",
+//  "senha": "1234",
+//  "dataNasc": "2000-01-01",
+//  "telefone": "79995634252",
+//  "perfil": "ewrfbhrwevuib"
+//}
+
 @RestController
 @RequestMapping("/espectadores")
 public class EspectadorController {
