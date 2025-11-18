@@ -58,7 +58,7 @@ public class CondutorController {
                 condutor.setEventosConduzidos(new java.util.ArrayList<>(eventos));
             }
 
-            condutorService.createCondutor(condutor);
+            condutorService.createCondutor(dto);
             return ResponseEntity.status(HttpStatus.CREATED).body("Condutor cadastrado com sucesso: " + condutor.getIdCondutor());
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());

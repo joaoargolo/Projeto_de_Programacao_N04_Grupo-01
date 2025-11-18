@@ -42,7 +42,7 @@ public abstract class Pessoa {
     }
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @Column(nullable = false, length = 30)
     private Status status = Status.PENDENTE_DE_CONFIRMACAO;
 
     public void atualizarStatusAutomaticamente() {
