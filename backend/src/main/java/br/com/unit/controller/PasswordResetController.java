@@ -7,6 +7,8 @@ import br.com.unit.service.PasswordResetService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+
 @RestController
 @RequestMapping("/password")
 @RequiredArgsConstructor
@@ -21,7 +23,9 @@ public class PasswordResetController {
     private final StaffRepository staffRepo;
 
     @PostMapping("/redefinir-senha")
-    public String redefinirSenha(@RequestParam String email, @RequestParam String tipo) {
+    public String redefinirSenha(@RequestBody Map<String, String> request) {
+        String email = request.get("email");
+        String tipo = request.get("tipo");
 
         Object usuario = switch (tipo) {
             case "CONDUTOR" -> condutorRepo.findByEmail(email).orElse(null);
@@ -51,18 +55,15 @@ public class PasswordResetController {
 
         String link = "http://localhost:8080/password/reset?token=" + token;
 
-        emailService.enviarEmail(
-                email,
-                "Redefinição de Senha",
-                "Clique no link para redefinir sua senha:\n" + link
-        );
-
-        return "Token enviado para o e-mail!";
+        return "Token gerado com sucesso! Link: " + link +
+                " - Use este link para redefinir sua senha.";
     }
 
-
     @PostMapping("/reset")
-    public String resetPassword(@RequestParam String token, @RequestParam String novaSenha) {
+    public String resetPassword(@RequestBody Map<String, String> request) {
+        String token = request.get("token");
+        String novaSenha = request.get("novaSenha");
+
         passwordResetService.resetarSenha(token, novaSenha);
         return "Senha redefinida com sucesso!";
     }

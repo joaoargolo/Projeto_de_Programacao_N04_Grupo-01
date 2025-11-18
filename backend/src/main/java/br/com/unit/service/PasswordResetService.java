@@ -10,6 +10,7 @@ import br.com.unit.repository.EspectadorRepository;
 import br.com.unit.repository.GerenteRepository;
 import br.com.unit.repository.PasswordResetTokenRepository;
 import br.com.unit.repository.StaffRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +19,7 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class PasswordResetService {
 
     private final PasswordResetTokenRepository tokenRepo;

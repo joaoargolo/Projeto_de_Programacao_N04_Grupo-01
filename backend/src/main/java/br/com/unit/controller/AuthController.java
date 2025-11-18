@@ -3,10 +3,10 @@ package br.com.unit.controller;
 import br.com.unit.classes.Espectador;
 import br.com.unit.dto.LoginRequest;
 import br.com.unit.repository.EspectadorRepository;
-import br.com.unit.service.PasswordService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import br.com.unit.service.PasswordService;
 
 import java.util.HashMap;
 import java.util.Map;
