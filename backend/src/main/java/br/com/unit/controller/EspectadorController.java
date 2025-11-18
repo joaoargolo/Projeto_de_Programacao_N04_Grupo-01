@@ -16,6 +16,8 @@ import org.springframework.http.HttpStatus;
 //  "email": "ana@example.com",
 //  "senha": "1234",
 //  "dataNasc": "2001-07-10",
+//  "telefone": "79998057227",
+//  "perfil": "sokdoef"
 //}
 
 @RestController
@@ -24,8 +26,6 @@ public class EspectadorController {
 
     @Autowired
     private EspectadorService espectadorService;
-
-    private List<Espectador> espectadores = new ArrayList<>();
 
     @GetMapping("/listar")
     public Collection<Espectador> listarEspectadores() {
@@ -46,14 +46,21 @@ public class EspectadorController {
 
     @PutMapping("atualizar/{id}")
     public ResponseEntity<Object> atualizarEspectador(@PathVariable int id, @RequestBody Espectador espectador) {
-
-        espectadorService.updateEspectador(id, espectador);
-        return ResponseEntity.ok("Espectador com o id:" + id + "atualizado com sucesso!!");
+        try {
+            espectadorService.updateEspectador(id, espectador);
+            return ResponseEntity.ok("Espectador com o id:" + id + "atualizado com sucesso!!");
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
     }
 
     @DeleteMapping("/deletar/{id}")
     public ResponseEntity<String> removerEspectador(@PathVariable int id) {
-        espectadorService.deleteEspectador(id);
-        return ResponseEntity.ok("Espectador com ID " + id + " removido com sucesso!");
+        try {
+            espectadorService.deleteEspectador(id);
+            return ResponseEntity.ok("Espectador com ID " + id + " removido com sucesso!");
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
     }
 }
