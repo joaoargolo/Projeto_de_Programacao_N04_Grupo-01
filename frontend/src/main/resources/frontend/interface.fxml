@@ -7,76 +7,95 @@
 <?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0"
+<BorderPane prefHeight="720.0" prefWidth="1280.0"
    xmlns="http://javafx.com/javafx/25"
    xmlns:fx="http://javafx.com/fxml/1" fx:controller="frontend.Controller">
-   <children>
-      <VBox fx:id="Vbox" alignment="CENTER" fillWidth="false" layoutX="443.0" layoutY="105.0" prefHeight="487.0" prefWidth="406.0" spacing="25.0" style="-fx-background-color: white; -fx-background-radius: 8px; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.25), 10, 0.5, 2, 2);">
-         <children>
-            <Label alignment="CENTER" prefHeight="29.0" prefWidth="192.0" text="Criar nova conta">
-               <font>
-                  <Font size="25.0" />
-               </font>
-            </Label>
-            <Line endX="143.0" endY="111.5" opacity="0.5" startX="-261.5" startY="111.5" strokeWidth="0.5" />
-            <TextField fx:id="NomeCadastroField" prefHeight="35.0" prefWidth="325.0" promptText="Nome">
-               <font>
-                  <Font name="Segoe UI" size="15.0" />
-               </font>
-            </TextField>
-            <TextField fx:id="EmailCadastroField" layoutX="10.0" layoutY="200.0" prefHeight="35.0" prefWidth="325.0" promptText="Email">
-               <font>
-                  <Font name="Ebrima" size="15.0" />
-               </font>
-            </TextField>
-            <PasswordField fx:id="SenhaCadastroField" layoutX="10.0" layoutY="233.0" prefHeight="35.0" prefWidth="325.0" promptText="Senha">
-               <font>
-                  <Font name="Segoe UI" size="15.0" />
-               </font>
-            </PasswordField>
-            <TextField fx:id="CpfField" prefHeight="35.0" prefWidth="325.0" promptText="CPF">
-               <font>
-                  <Font name="Ebrima" size="15.0" />
-               </font>
-            </TextField>
-            <DatePicker prefHeight="35.0" fx:id="DataNascField" prefWidth="325.0" promptText="Data de Nascimento" />
-            <ChoiceBox fx:id="FuncaoCadastroField" prefHeight="35.0" prefWidth="325.0" />
-            <Button fx:id="CadastroBotao" alignment="CENTER" mnemonicParsing="false" onAction="#CadastroClick" prefHeight="35.0" prefWidth="150.0" style="-fx-background-color: green;" text="Cadastrar-se" textFill="#f5f5f5">
-               <font>
-                  <Font name="System Bold" size="16.0" />
-               </font>
-            </Button>
-         </children>
-      </VBox>
-      <AnchorPane prefHeight="63.0" prefWidth="1280.0" style="-fx-background-color: gray;">
-         <children>
-            <Label layoutX="671.0" layoutY="2.0" prefHeight="63.0" prefWidth="122.0" text="Já possui conta?" textFill="WHITE">
-               <font>
-                  <Font name="Segoe UI Bold" size="16.0" />
-               </font>
-            </Label>
-            <TextField fx:id="EmailLoginField" layoutX="815.0" layoutY="15.0" prefHeight="36.0" prefWidth="149.0" promptText="Email....">
-               <font>
-                  <Font name="Segoe UI" size="15.0" />
-               </font>
-            </TextField>
-            <PasswordField fx:id="SenhaLoginField" layoutX="980.0" layoutY="15.0" prefHeight="36.0" prefWidth="149.0" promptText="Senha....">
-               <font>
-                  <Font name="Segoe UI" size="15.0" />
-               </font>
-            </PasswordField>
-            <Button fx:id="EntrarBotao" alignment="CENTER" layoutX="1139.0" layoutY="15.0" mnemonicParsing="false" onAction="#EntrarClick" prefHeight="35.0" prefWidth="100.0" style="-fx-background-color: green;" text="Entrar" textFill="#f5f5f5">
-               <font>
-                  <Font name="System Bold" size="16.0" />
-               </font>
-            </Button>
-         </children>
+
+   <top>
+      <AnchorPane prefHeight="63.0" style="-fx-background-color: gray;" BorderPane.alignment="CENTER">
+
+         <Label layoutY="2.0" alignment="CENTER" prefHeight="63.0" prefWidth="200.0" text="Já possui conta?" textFill="WHITE">
+            <font>
+               <Font name="Segoe UI Bold" size="16.0" />
+            </font>
+         </Label>
+
+         <TextField fx:id="EmailLoginField" layoutY="15.0" prefHeight="36.0" prefWidth="150.0" promptText="Email..." AnchorPane.rightAnchor="260.0" style="-fx-padding: 0 100 0 10;">
+            <font>
+               <Font name="Segoe UI" size="15.0" />
+            </font>
+         </TextField>
+
+         <PasswordField fx:id="SenhaLoginField" layoutY="15.0" prefHeight="36.0" prefWidth="150.0" promptText="Senha..." AnchorPane.rightAnchor="140.0" style="-fx-padding: 0 10 0 10;">
+            <font>
+               <Font name="Segoe UI" size="15.0" />
+            </font>
+         </PasswordField>
+
+         <Button fx:id="EntrarBotao" layoutY="15.0" prefHeight="35.0" prefWidth="100.0" text="Entrar" style="-fx-background-color: green;" textFill="#f5f5f5" mnemonicParsing="false" onAction="#EntrarClick" AnchorPane.rightAnchor="20.0">
+            <font>
+               <Font name="System Bold" size="16.0" />
+            </font>
+         </Button>
+
       </AnchorPane>
-      <AnchorPane layoutY="657.0" prefHeight="63.0" prefWidth="1280.0" style="-fx-background-color: gray;" />
-   </children>
-</Pane>
+   </top>
+
+   <center>
+      <VBox fx:id="Vbox" alignment="CENTER" spacing="25.0" maxWidth="400" fillWidth="false" BorderPane.alignment="CENTER" style="-fx-background-color: white; -fx-background-radius: 8px; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.25), 10, 0.5, 2, 2);">
+
+         <Label alignment="CENTER" prefHeight="29.0" prefWidth="192.0" text="Criar nova conta">
+            <font>
+               <Font size="25.0" />
+            </font>
+         </Label>
+
+         <Line endX="200" opacity="0.5" strokeWidth="0.5" />
+
+         <TextField fx:id="NomeCadastroField" prefHeight="35.0" prefWidth="325.0" promptText="Nome">
+            <font>
+               <Font name="Segoe UI" size="15.0" />
+            </font>
+         </TextField>
+
+         <TextField fx:id="EmailCadastroField" prefHeight="35.0" prefWidth="325.0" promptText="Email">
+            <font>
+               <Font name="Ebrima" size="15.0" />
+            </font>
+         </TextField>
+
+         <PasswordField fx:id="SenhaCadastroField" prefHeight="35.0" prefWidth="325.0" promptText="Senha">
+            <font>
+               <Font name="Segoe UI" size="15.0" />
+            </font>
+         </PasswordField>
+
+         <TextField fx:id="CpfField" prefHeight="35.0" prefWidth="325.0" promptText="CPF">
+            <font>
+               <Font name="Ebrima" size="15.0" />
+            </font>
+         </TextField>
+
+         <DatePicker fx:id="DataNascField" prefHeight="35.0" prefWidth="325.0" promptText="Data de Nascimento" />
+
+         <ChoiceBox fx:id="FuncaoCadastroField" prefHeight="35.0" prefWidth="325.0" />
+
+         <Button fx:id="CadastroBotao" prefHeight="35.0" prefWidth="150.0" alignment="CENTER" text="Cadastrar-se" textFill="#f5f5f5" style="-fx-background-color: green;" mnemonicParsing="false" onAction="#CadastroClick">
+            <font>
+               <Font name="System Bold" size="16.0" />
+            </font>
+         </Button>
+
+      </VBox>
+   </center>
+
+   <bottom>
+      <AnchorPane prefHeight="63.0" style="-fx-background-color: gray;" BorderPane.alignment="CENTER"/>
+   </bottom>
+
+</BorderPane>
