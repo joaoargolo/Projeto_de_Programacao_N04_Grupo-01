@@ -14,40 +14,22 @@ public class PasswordResetToken {
 
     private LocalDateTime expiration;
 
-    @OneToOne
-    @JoinColumn(name = "pessoa_id")
-    private Pessoa pessoa;
+    private Integer usuarioId;
 
+    private String usuarioTipo;
 
-    public Long getId() {
-        return id;
-    }
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+    public String getToken() { return token; }
+    public void setToken(String token) { this.token = token; }
 
-    public String getToken() {
-        return token;
-    }
+    public LocalDateTime getExpiration() { return expiration; }
+    public void setExpiration(LocalDateTime expiration) { this.expiration = expiration; }
 
-    public void setToken(String token) {
-        this.token = token;
-    }
+    public Integer getUsuarioId() { return usuarioId; }
+    public void setUsuarioId(Integer usuarioId) { this.usuarioId = usuarioId; }
 
-    public LocalDateTime getExpiration() {
-        return expiration;
-    }
-
-    public void setExpiration(LocalDateTime expiration) {
-        this.expiration = expiration;
-    }
-
-    public Pessoa getPessoa() {
-        return pessoa;
-    }
-
-    public void setPessoa(Pessoa pessoa) {
-        this.pessoa = pessoa;
-    }
+    public String getUsuarioTipo() { return usuarioTipo; }
+    public void setUsuarioTipo(String usuarioTipo) { this.usuarioTipo = usuarioTipo; }
 }
