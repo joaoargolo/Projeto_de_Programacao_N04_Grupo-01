@@ -34,10 +34,10 @@ public class StaffController {
     @Autowired
     private StaffService staffService;
 
-    private List<Staff> staff = new ArrayList<>();
-
     @GetMapping("/listar")
-    public Collection<Staff> listarStaff() { return staffService.getStaff(); }
+    public Collection<Staff> listarStaff() {
+        return staffService.getStaff();
+    }
 
     @PostMapping("/criar")
     public ResponseEntity<String> criarStaff(@RequestBody StaffInputDTO dto){
@@ -58,7 +58,7 @@ public class StaffController {
                     e.setIdEvento(id);
                     return e;
                 }).toList();
-                staff.setEventosAuxiliados(new java.util.ArrayList<>(eventos));
+                staff.setEventosAuxiliados(new ArrayList<>(eventos));
             }
 
             staffService.createStaff(staff);
@@ -68,7 +68,18 @@ public class StaffController {
         }
     }
 
-    @PutMapping("atualizar/{id}")
+    @PutMapping("/ativar/{id}")
+    public ResponseEntity<String> ativarStaff(@PathVariable int id) {
+        try {
+            staffService.ativarStaff(id);
+            return ResponseEntity.ok("Staff com ID " + id + " ativado com sucesso!");
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
+    }
+
+
+    @PutMapping("/atualizar/{id}")
     public ResponseEntity<Object> atualizarStaff(@PathVariable int id, @RequestBody StaffInputDTO dto) {
         try {
             Staff staff = new Staff();
@@ -87,7 +98,7 @@ public class StaffController {
                     e.setIdEvento(idEv);
                     return e;
                 }).toList();
-                staff.setEventosAuxiliados(new java.util.ArrayList<>(eventos));
+                staff.setEventosAuxiliados(new ArrayList<>(eventos));
             }
 
             staffService.updateStaff(id, staff);
@@ -105,5 +116,13 @@ public class StaffController {
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
+    }
+
+    @GetMapping("/buscar/email")
+    public ResponseEntity<?> buscarPorEmail(@RequestParam String email) {
+        Staff staff = staffService.buscarPorEmail(email);
+        return (staff == null)
+                ? ResponseEntity.notFound().build()
+                : ResponseEntity.ok(staff);
     }
 }

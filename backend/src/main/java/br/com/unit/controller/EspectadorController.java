@@ -9,17 +9,6 @@ import java.util.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
 
-//POST http://localhost:8080/espectadores
-//{
-//  "nome": "Ana",
-//  "cpf": "11122233344",
-//  "email": "ana@example.com",
-//  "senha": "1234",
-//  "dataNasc": "2001-07-10",
-//  "telefone": "79998057227",
-//  "perfil": "sokdoef"
-//}
-
 @RestController
 @RequestMapping("/espectadores")
 public class EspectadorController {
@@ -36,17 +25,29 @@ public class EspectadorController {
     public ResponseEntity<String> criarEspectador(@RequestBody Espectador espectador) {
         try {
             espectadorService.createEspectador(espectador);
-            return ResponseEntity.status(HttpStatus.CREATED).body("Espectador cadastrado com sucesso: " + espectador.getIdEspectador());
+            return ResponseEntity.status(HttpStatus.CREATED)
+                    .body("Espectador cadastrado com sucesso: " + espectador.getIdEspectador());
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
 
+    @PutMapping("/ativar/{id}")
+    public ResponseEntity<String> ativarEspectador(@PathVariable int id) {
+        try {
+            espectadorService.ativarEspectador(id);
+            return ResponseEntity.ok("Espectador com ID " + id + " ativado com sucesso!");
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
+    }
+
+
     @PutMapping("atualizar/{id}")
     public ResponseEntity<Object> atualizarEspectador(@PathVariable int id, @RequestBody Espectador espectador) {
         try {
             espectadorService.updateEspectador(id, espectador);
-            return ResponseEntity.ok("Espectador com o id:" + id + "atualizado com sucesso!!");
+            return ResponseEntity.ok("Espectador com o id:" + id + " atualizado com sucesso!!");
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
@@ -59,6 +60,17 @@ public class EspectadorController {
             return ResponseEntity.ok("Espectador com ID " + id + " removido com sucesso!");
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
+    }
+
+
+    @GetMapping("/buscar/email")
+    public ResponseEntity<?> buscarPorEmail(@RequestParam String email) {
+        try {
+            Espectador espectador = espectadorService.buscarPorEmail(email);
+            return ResponseEntity.ok(espectador);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }
 }

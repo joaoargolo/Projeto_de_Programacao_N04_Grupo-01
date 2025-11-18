@@ -65,6 +65,17 @@ public class CondutorController {
         }
     }
 
+    @PutMapping("/ativar/{id}")
+    public ResponseEntity<String> ativarCondutor(@PathVariable int id) {
+        try {
+            condutorService.ativarCondutor(id);
+            return ResponseEntity.ok("Condutor com ID " + id + " ativado com sucesso!");
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
+    }
+
+
     @PutMapping("atualizar/{id}")
     public ResponseEntity<Object> atualizarCondutor(@PathVariable int id, @RequestBody br.com.unit.dto.CondutorInputDTO dto) {
         try {
@@ -100,6 +111,19 @@ public class CondutorController {
             return ResponseEntity.ok("Condutor com ID " + id + " removido com sucesso!");
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
+    }
+
+    @GetMapping("/buscar/email")
+    public ResponseEntity<?> buscarPorEmail(@RequestParam String email) {
+
+        Optional<Condutor> opt = condutorService.buscarPorEmail(email);
+
+        if (opt.isPresent()) {
+            return ResponseEntity.ok(opt.get());
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("Nenhum condutor encontrado com o email: " + email);
         }
     }
 }

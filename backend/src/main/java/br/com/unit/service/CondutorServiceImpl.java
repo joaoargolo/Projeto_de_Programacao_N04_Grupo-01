@@ -1,12 +1,8 @@
 package br.com.unit.service;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.ArrayList;
-import java.util.Set;
-import java.util.HashSet;
-import java.util.Collections;
+import java.util.*;
 
+import br.com.unit.classes.Pessoa;
 import br.com.unit.repository.CondutorRepository;
 import br.com.unit.repository.EventoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +33,8 @@ public class CondutorServiceImpl implements CondutorService {
         
         String senhaCriptografada = passwordService.criptografar(condutor.getSenha());
         condutor.setSenha(senhaCriptografada);
+
+        condutor.atualizarStatusAutomaticamente();
 
         if (condutor.getEventosConduzidos() != null && !condutor.getEventosConduzidos().isEmpty()) {
             List<Evento> eventosValidados = condutor.getEventosConduzidos().stream().map(e -> eventoRepository.findById(e.getIdEvento()).orElseThrow(() -> new IllegalArgumentException("Evento com ID " + e.getIdEvento() + " não encontrado!"))).toList();
@@ -86,6 +84,7 @@ public class CondutorServiceImpl implements CondutorService {
         condutorExistente.setDataNasc(condutorAtualizado.getDataNasc());
         condutorExistente.setTelefone(condutorAtualizado.getTelefone());
         condutorExistente.setPerfil(condutorAtualizado.getPerfil());
+        condutorExistente.atualizarStatusAutomaticamente();
 
         if (condutorAtualizado.getEventosConduzidos() != null) {
             List<Evento> eventosValidados = condutorAtualizado.getEventosConduzidos().isEmpty()
@@ -151,15 +150,40 @@ public class CondutorServiceImpl implements CondutorService {
     @Override
     @Transactional
     public void deleteCondutor(int id) {
-        if (!condutorRepository.existsById(id)) {
-            throw new IllegalArgumentException("Condutor com ID " + id + " não encontrado!");
-        }
-        condutorRepository.deleteById(id);
+        Condutor condutor = condutorRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Condutor não encontrado!"));
+
+        condutor.desativar();
+        condutorRepository.save(condutor);
     }
+
 
     @Override
     @Transactional(readOnly = true)
     public Collection<Condutor> getCondutor() {
         return condutorRepository.findAll();
     }
+
+    @Override
+    public Optional<Condutor> buscarPorEmail(String email) {
+        return condutorRepository.findByEmail(email);
+    }
+
+    @Override
+    public void ativarCondutor(int id) {
+        Condutor condutor = condutorRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Condutor não encontrado!"));
+
+        if (condutor.getNome() != null && condutor.getCpf() != null
+                && condutor.getEmail() != null && condutor.getSenha() != null
+                && condutor.getDataNasc() != null) {
+
+            condutor.setStatus(Pessoa.Status.ATIVO);
+        } else {
+            condutor.setStatus(Pessoa.Status.PENDENTE_DE_CONFIRMACAO);
+        }
+
+        condutorRepository.save(condutor);
+    }
+
 }
