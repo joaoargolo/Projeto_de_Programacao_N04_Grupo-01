@@ -1,5 +1,7 @@
 # Projeto de Programação N04 - Grupo 01
 
+LINK: https://youtu.be/azgJe1s1lS0
+
 ## 🎯 Objetivo do módulo desenvolvido
 > O objetivo é criar uma plataforma responsável por cadastrar eventos e pessoas, guardando suas informações e realizando ligações entre ambos.
 
