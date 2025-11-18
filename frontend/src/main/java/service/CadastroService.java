@@ -21,6 +21,7 @@ public class CadastroService {
                         case "espectador" -> "/espectadores/criar";
                         case "gerente" -> "/gerentes/criar";
                         case "staff" -> "/staff/criar";
+                        case "condutor" -> "/condutores/criar";
                         default -> throw new IllegalArgumentException("Tipo inválido para cadastro simples: " + tipo);
                 };
 

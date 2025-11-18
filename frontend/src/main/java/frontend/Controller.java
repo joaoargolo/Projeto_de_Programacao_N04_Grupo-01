@@ -159,7 +159,22 @@ public class Controller {
                     e.printStackTrace();
                 }
             }
+            case "Condutor" -> {
+                try {
+                    var response = CadastroService.postCadastro(nome, cpf, email, senha, dataNasc, "condutor");
+                    if (response.statusCode() == 200 || response.statusCode() == 201) {
+                        System.out.println("Cadastro de condutor realizado com sucesso!");
+                        IrParaLogin();
+                        LimparFields();
+                    } else {
+                        System.out.println("Erro ao cadastrar condutor: " + response.body());
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
             default -> System.out.println("Função inválida!");
+
         }
     }
 

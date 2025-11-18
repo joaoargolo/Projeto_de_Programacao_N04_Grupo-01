@@ -34,12 +34,15 @@ public class CondutorServiceImpl implements CondutorService {
         if (jaExiste) {
             throw new IllegalArgumentException("Já existe um condutor com este e-mail ou CPF!");
         }
-        
+
         String senhaCriptografada = passwordService.criptografar(condutor.getSenha());
         condutor.setSenha(senhaCriptografada);
 
         if (condutor.getEventosConduzidos() != null && !condutor.getEventosConduzidos().isEmpty()) {
-            List<Evento> eventosValidados = condutor.getEventosConduzidos().stream().map(e -> eventoRepository.findById(e.getIdEvento()).orElseThrow(() -> new IllegalArgumentException("Evento com ID " + e.getIdEvento() + " não encontrado!"))).toList();
+            List<Evento> eventosValidados = condutor.getEventosConduzidos().stream()
+                    .map(e -> eventoRepository.findById(e.getIdEvento()).orElseThrow(() -> new IllegalArgumentException(
+                            "Evento com ID " + e.getIdEvento() + " não encontrado!")))
+                    .toList();
             condutor.setEventosConduzidos(new ArrayList<>(eventosValidados));
 
             // Salva o condutor para garantir ID
@@ -52,7 +55,8 @@ public class CondutorServiceImpl implements CondutorService {
                     listaCondutores = new ArrayList<>();
                     ev.setCondutores(listaCondutores);
                 }
-                boolean presente = listaCondutores.stream().anyMatch(c -> c.getIdCondutor() != null && c.getIdCondutor().equals(condutorSalvo.getIdCondutor()));
+                boolean presente = listaCondutores.stream().anyMatch(
+                        c -> c.getIdCondutor() != null && c.getIdCondutor().equals(condutorSalvo.getIdCondutor()));
                 if (!presente) {
                     listaCondutores.add(condutorSalvo);
                     eventoRepository.save(ev);
@@ -66,14 +70,31 @@ public class CondutorServiceImpl implements CondutorService {
     }
 
     @Override
+    public Condutor getByEmail(String email) {
+        return condutorRepository.findByEmail(email)
+                .orElseThrow(() -> new IllegalArgumentException("Condutor não encontrado com o email: " + email));
+    }
+
+    @Override
+    public boolean autenticar(String email, String senha) {
+        return condutorRepository.findByEmail(email)
+                .map(c -> {
+
+                    return passwordService.verificar(senha, c.getSenha());
+                })
+                .orElse(false);
+    }
+
+    @Override
     @Transactional
     public void updateCondutor(int id, Condutor condutorAtualizado) {
-        Condutor condutorExistente = condutorRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Condutor com ID " + id + " não encontrado!"));
+        Condutor condutorExistente = condutorRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Condutor com ID " + id + " não encontrado!"));
 
         condutorExistente.setNome(condutorAtualizado.getNome());
         condutorExistente.setEmail(condutorAtualizado.getEmail());
         condutorExistente.setCpf(condutorAtualizado.getCpf());
-        
+
         if (condutorAtualizado.getSenha() != null && !condutorAtualizado.getSenha().isEmpty()) {
             if (!passwordService.jaEstaCriptografada(condutorAtualizado.getSenha())) {
                 String senhaCriptografada = passwordService.criptografar(condutorAtualizado.getSenha());
@@ -82,7 +103,7 @@ public class CondutorServiceImpl implements CondutorService {
                 condutorExistente.setSenha(condutorAtualizado.getSenha());
             }
         }
-        
+
         condutorExistente.setDataNasc(condutorAtualizado.getDataNasc());
         condutorExistente.setTelefone(condutorAtualizado.getTelefone());
         condutorExistente.setPerfil(condutorAtualizado.getPerfil());
@@ -91,24 +112,32 @@ public class CondutorServiceImpl implements CondutorService {
             List<Evento> eventosValidados = condutorAtualizado.getEventosConduzidos().isEmpty()
                     ? Collections.emptyList()
                     : condutorAtualizado.getEventosConduzidos().stream()
-                    .map(e -> eventoRepository.findById(e.getIdEvento()).orElseThrow(() -> new IllegalArgumentException("Evento com ID " + e.getIdEvento() + " não encontrado!")))
-                    .toList();
+                            .map(e -> eventoRepository.findById(e.getIdEvento())
+                                    .orElseThrow(() -> new IllegalArgumentException(
+                                            "Evento com ID " + e.getIdEvento() + " não encontrado!")))
+                            .toList();
 
             List<Evento> eventosAntigos = condutorExistente.getEventosConduzidos();
-            if (eventosAntigos == null) eventosAntigos = Collections.emptyList();
+            if (eventosAntigos == null)
+                eventosAntigos = Collections.emptyList();
 
             Set<Integer> oldIds = new HashSet<>();
-            for (Evento ev : eventosAntigos) if (ev.getIdEvento() != null) oldIds.add(ev.getIdEvento());
+            for (Evento ev : eventosAntigos)
+                if (ev.getIdEvento() != null)
+                    oldIds.add(ev.getIdEvento());
 
             Set<Integer> newIds = new HashSet<>();
-            for (Evento ev : eventosValidados) if (ev.getIdEvento() != null) newIds.add(ev.getIdEvento());
+            for (Evento ev : eventosValidados)
+                if (ev.getIdEvento() != null)
+                    newIds.add(ev.getIdEvento());
 
             // remove condutor from events that are no longer associated
             for (Evento evAnt : eventosAntigos) {
                 if (!newIds.contains(evAnt.getIdEvento())) {
                     List<Condutor> cList = evAnt.getCondutores();
                     if (cList != null) {
-                        cList.removeIf(c -> c.getIdCondutor() != null && c.getIdCondutor().equals(condutorExistente.getIdCondutor()));
+                        cList.removeIf(c -> c.getIdCondutor() != null
+                                && c.getIdCondutor().equals(condutorExistente.getIdCondutor()));
                         eventoRepository.save(evAnt);
                     }
                 }
@@ -122,7 +151,8 @@ public class CondutorServiceImpl implements CondutorService {
                         cList = new ArrayList<>();
                         evNovo.setCondutores(cList);
                     }
-                    boolean presente = cList.stream().anyMatch(c -> c.getIdCondutor() != null && c.getIdCondutor().equals(condutorExistente.getIdCondutor()));
+                    boolean presente = cList.stream().anyMatch(c -> c.getIdCondutor() != null
+                            && c.getIdCondutor().equals(condutorExistente.getIdCondutor()));
                     if (!presente) {
                         cList.add(condutorExistente);
                         eventoRepository.save(evNovo);
@@ -137,7 +167,8 @@ public class CondutorServiceImpl implements CondutorService {
                 for (Evento evAnt : eventosAntigos) {
                     List<Condutor> cList = evAnt.getCondutores();
                     if (cList != null) {
-                        cList.removeIf(c -> c.getIdCondutor() != null && c.getIdCondutor().equals(condutorExistente.getIdCondutor()));
+                        cList.removeIf(c -> c.getIdCondutor() != null
+                                && c.getIdCondutor().equals(condutorExistente.getIdCondutor()));
                         eventoRepository.save(evAnt);
                     }
                 }

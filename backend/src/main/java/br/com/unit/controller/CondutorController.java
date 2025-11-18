@@ -24,7 +24,6 @@ import org.springframework.http.HttpStatus;
 //  ]
 //}
 
-
 @RestController
 @RequestMapping("/condutores")
 public class CondutorController {
@@ -59,14 +58,16 @@ public class CondutorController {
             }
 
             condutorService.createCondutor(condutor);
-            return ResponseEntity.status(HttpStatus.CREATED).body("Condutor cadastrado com sucesso: " + condutor.getIdCondutor());
+            return ResponseEntity.status(HttpStatus.CREATED)
+                    .body("Condutor cadastrado com sucesso: " + condutor.getIdCondutor());
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
 
     @PutMapping("atualizar/{id}")
-    public ResponseEntity<Object> atualizarCondutor(@PathVariable int id, @RequestBody br.com.unit.dto.CondutorInputDTO dto) {
+    public ResponseEntity<Object> atualizarCondutor(@PathVariable int id,
+            @RequestBody br.com.unit.dto.CondutorInputDTO dto) {
         try {
             Condutor condutor = new Condutor();
             condutor.setNome(dto.getNome());
