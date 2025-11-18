@@ -51,7 +51,8 @@ public class GerenteController {
             }
 
             gerenteService.createGerente(g);
-            return ResponseEntity.status(HttpStatus.CREATED).body("Gerente cadastrado com sucesso: " + g.getIdGerente());
+            return ResponseEntity.status(HttpStatus.CREATED)
+                    .body("Gerente cadastrado com sucesso: " + g.getIdGerente());
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
@@ -74,7 +75,8 @@ public class GerenteController {
 
 
     @PutMapping("atualizar/{id}")
-    public ResponseEntity<Object> atualizarGerente(@PathVariable int id, @RequestBody br.com.unit.dto.GerenteInputDTO dto) {
+    public ResponseEntity<Object> atualizarGerente(@PathVariable int id,
+            @RequestBody br.com.unit.dto.GerenteInputDTO dto) {
         try {
             Gerente g = new Gerente();
             g.setNome(dto.getNome());
@@ -102,7 +104,7 @@ public class GerenteController {
     }
 
     @DeleteMapping("/deletar/{id}")
-    public ResponseEntity<String> removerGerente(@PathVariable int id){
+    public ResponseEntity<String> removerGerente(@PathVariable int id) {
         try {
             gerenteService.deleteGerente(id);
             return ResponseEntity.ok("Gerente com o id " + id + " foi removido com sucesso!");

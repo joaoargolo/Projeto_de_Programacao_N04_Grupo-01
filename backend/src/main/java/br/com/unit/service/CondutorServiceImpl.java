@@ -3,6 +3,7 @@ package br.com.unit.service;
 import java.util.*;
 
 import br.com.unit.classes.Pessoa;
+import br.com.unit.dto.CondutorInputDTO;
 import br.com.unit.repository.CondutorRepository;
 import br.com.unit.repository.EventoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,41 +26,50 @@ public class CondutorServiceImpl implements CondutorService {
 
     @Override
     @Transactional
-    public void createCondutor(Condutor condutor) {
-        boolean jaExiste = condutorRepository.existsByEmailOrCpf(condutor.getEmail(), condutor.getCpf());
+    public void createCondutor(CondutorInputDTO dto) {
+
+        boolean jaExiste = condutorRepository.existsByEmailOrCpf(dto.getEmail(), dto.getCpf());
         if (jaExiste) {
             throw new IllegalArgumentException("Já existe um condutor com este e-mail ou CPF!");
         }
-        
-        String senhaCriptografada = passwordService.criptografar(condutor.getSenha());
-        condutor.setSenha(senhaCriptografada);
 
+        Condutor condutor = new Condutor();
+        condutor.setNome(dto.getNome());
+        condutor.setCpf(dto.getCpf());
+        condutor.setEmail(dto.getEmail());
+        condutor.setSenha(passwordService.criptografar(dto.getSenha()));
+        condutor.setDataNasc(dto.getDataNasc());
+        condutor.setTelefone(dto.getTelefone());
+        condutor.setPerfil(dto.getPerfil());
+
+        // 🔥 status automático
         condutor.atualizarStatusAutomaticamente();
 
-        if (condutor.getEventosConduzidos() != null && !condutor.getEventosConduzidos().isEmpty()) {
-            List<Evento> eventosValidados = condutor.getEventosConduzidos().stream().map(e -> eventoRepository.findById(e.getIdEvento()).orElseThrow(() -> new IllegalArgumentException("Evento com ID " + e.getIdEvento() + " não encontrado!"))).toList();
-            condutor.setEventosConduzidos(new ArrayList<>(eventosValidados));
+        // 🔥 converte IDs → Evento
+        if (dto.getEventosConduzidos() != null && !dto.getEventosConduzidos().isEmpty()) {
 
-            // Salva o condutor para garantir ID
-            Condutor condutorSalvo = condutorRepository.save(condutor);
+            List<Evento> eventos = dto.getEventosConduzidos().stream()
+                    .map(id -> eventoRepository.findById(id)
+                            .orElseThrow(() -> new IllegalArgumentException(
+                                    "Evento com ID " + id + " não encontrado!")))
+                    .toList();
 
-            // Atualiza o lado dono (Evento.condutores)
-            for (Evento ev : eventosValidados) {
-                List<Condutor> listaCondutores = ev.getCondutores();
-                if (listaCondutores == null) {
-                    listaCondutores = new ArrayList<>();
-                    ev.setCondutores(listaCondutores);
-                }
-                boolean presente = listaCondutores.stream().anyMatch(c -> c.getIdCondutor() != null && c.getIdCondutor().equals(condutorSalvo.getIdCondutor()));
-                if (!presente) {
-                    listaCondutores.add(condutorSalvo);
-                    eventoRepository.save(ev);
+            condutor.setEventosConduzidos(new ArrayList<>(eventos));
+        }
+
+        Condutor salvo = condutorRepository.save(condutor);
+
+        // 🔥 atualiza o lado do Evento (bidirecional)
+        if (salvo.getEventosConduzidos() != null) {
+            for (Evento evento : salvo.getEventosConduzidos()) {
+                if (evento.getCondutores() == null)
+                    evento.setCondutores(new ArrayList<>());
+
+                if (!evento.getCondutores().contains(salvo)) {
+                    evento.getCondutores().add(salvo);
+                    eventoRepository.save(evento);
                 }
             }
-            return;
-        } else {
-            condutor.setEventosConduzidos(null);
-            condutorRepository.save(condutor);
         }
     }
 

@@ -40,7 +40,7 @@ public class StaffController {
     }
 
     @PostMapping("/criar")
-    public ResponseEntity<String> criarStaff(@RequestBody StaffInputDTO dto){
+    public ResponseEntity<String> criarStaff(@RequestBody StaffInputDTO dto) {
         try {
             Staff staff = new Staff();
             staff.setNome(dto.getNome());
@@ -109,7 +109,7 @@ public class StaffController {
     }
 
     @DeleteMapping("/deletar/{id}")
-    public ResponseEntity<String> removerStaff(@PathVariable int id){
+    public ResponseEntity<String> removerStaff(@PathVariable int id) {
         try {
             staffService.deleteStaff(id);
             return ResponseEntity.ok("Membro do staff com ID " + id + " removido com sucesso!");

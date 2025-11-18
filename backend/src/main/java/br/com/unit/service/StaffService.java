@@ -4,10 +4,19 @@ import java.util.Collection;
 import br.com.unit.classes.Staff;
 
 public interface StaffService {
-    void createStaff(Staff staff);
-    void updateStaff(int id, Staff staff);
-    void deleteStaff(int id);
-    Collection<Staff> getStaff();
+    public abstract void createStaff(Staff staff);
+
+    public abstract void updateStaff(int id, Staff staff);
+
+    public abstract Staff getByEmail(String email);
+
+    public abstract void deleteStaff(int id);
+
+    public abstract boolean autenticar(String email, String senha);
+
+    public abstract Collection<Staff> getStaff();
+
     Staff buscarPorEmail(String email);
+
     void ativarStaff(int id);
 }
