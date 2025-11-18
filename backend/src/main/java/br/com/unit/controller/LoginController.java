@@ -3,6 +3,8 @@ package br.com.unit.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import br.com.unit.classes.Espectador;
+import br.com.unit.classes.Gerente;
+import br.com.unit.classes.Staff;
 import br.com.unit.service.EspectadorService;
 import java.util.*;
 import br.com.unit.dto.LoginDTO;
@@ -41,11 +43,23 @@ public class LoginController {
         }
 
         if (gerenteService.autenticar(loginDTO.email(), loginDTO.senha())) {
-            return ResponseEntity.ok("Login realizado com sucesso! Tipo: GERENTE");
+            Gerente g = gerenteService.getByEmail(loginDTO.email());
+            PaginaUsuarioDTO dto = new PaginaUsuarioDTO();
+            dto.setNome(g.getNome());
+            dto.setCpf(g.getCpf());
+            dto.setFuncao("GERENTE");
+            dto.setDataNascimento(g.getDataNasc());
+            return ResponseEntity.ok(dto);
         }
 
         if (staffService.autenticar(loginDTO.email(), loginDTO.senha())) {
-            return ResponseEntity.ok("Login realizado com sucesso! Tipo: STAFF");
+            Staff s = staffService.getByEmail(loginDTO.email());
+            PaginaUsuarioDTO dto = new PaginaUsuarioDTO();
+            dto.setNome(s.getNome());
+            dto.setCpf(s.getCpf());
+            dto.setFuncao("STAFF");
+            dto.setDataNascimento(s.getDataNasc());
+            return ResponseEntity.ok(dto);
         }
 
         return ResponseEntity.status(401).body("Email ou senha incorretos");

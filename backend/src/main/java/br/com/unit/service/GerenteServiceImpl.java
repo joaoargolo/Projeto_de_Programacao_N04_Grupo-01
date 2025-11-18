@@ -35,6 +35,12 @@ public class GerenteServiceImpl implements GerenteService {
     }
 
     @Override
+    public Gerente getByEmail(String email) {
+        return gerenteRepository.findByEmail(email)
+                .orElseThrow(() -> new IllegalArgumentException("Gerente não encontrado com o email: " + email));
+    }
+
+    @Override
     public void updateGerente(int id, Gerente gerente) {
         if (!gerenteRepository.existsById(id)) {
             throw new IllegalArgumentException("Gerente com ID " + id + " não encontrado!");

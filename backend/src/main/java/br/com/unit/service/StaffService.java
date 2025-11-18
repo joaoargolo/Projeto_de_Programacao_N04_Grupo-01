@@ -8,6 +8,8 @@ public interface StaffService {
 
     public abstract void updateStaff(int id, Staff staff);
 
+    public abstract Staff getByEmail(String email);
+
     public abstract void deleteStaff(int id);
 
     public abstract boolean autenticar(String email, String senha);

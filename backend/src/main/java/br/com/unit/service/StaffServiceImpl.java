@@ -37,6 +37,12 @@ public class StaffServiceImpl implements StaffService {
     }
 
     @Override
+    public Staff getByEmail(String email) {
+        return staffRepository.findByEmail(email)
+                .orElseThrow(() -> new IllegalArgumentException("Staff não encontrado com o email: " + email));
+    }
+
+    @Override
     public void updateStaff(int id, Staff staff) {
         if (!staffRepository.existsById(id)) {
             throw new IllegalArgumentException("Staff com ID " + id + " não encontrado!");
