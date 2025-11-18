@@ -15,4 +15,12 @@ public interface EspectadorService {
     public abstract boolean autenticar(String email, String senha);
 
     public abstract Collection<Espectador> getEspectador();
+
+    public abstract void participarDeEvento(int idEspectador, int idEvento);
+
+    public abstract void sairDoEvento(int idEspectador, int idEvento);
+
+    Espectador buscarPorEmail(String email);
+
+    void ativarEspectador(int id);
 }

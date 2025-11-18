@@ -3,7 +3,11 @@ package br.com.unit.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import br.com.unit.classes.Espectador;
+import br.com.unit.classes.Condutor;
+import br.com.unit.classes.Gerente;
+import br.com.unit.classes.Staff;
 import br.com.unit.service.EspectadorService;
+import br.com.unit.service.CondutorService;
 import java.util.*;
 import br.com.unit.dto.LoginDTO;
 import br.com.unit.dto.PaginaUsuarioDTO;
@@ -26,6 +30,9 @@ public class LoginController {
     @Autowired
     private StaffService staffService;
 
+    @Autowired
+    private CondutorService condutorService;
+
     @PostMapping
     public ResponseEntity<?> login(@RequestBody LoginDTO loginDTO) {
 
@@ -41,13 +48,34 @@ public class LoginController {
         }
 
         if (gerenteService.autenticar(loginDTO.email(), loginDTO.senha())) {
-            return ResponseEntity.ok("Login realizado com sucesso! Tipo: GERENTE");
+            Gerente g = gerenteService.getByEmail(loginDTO.email());
+            PaginaUsuarioDTO dto = new PaginaUsuarioDTO();
+            dto.setNome(g.getNome());
+            dto.setCpf(g.getCpf());
+            dto.setFuncao("GERENTE");
+            dto.setDataNascimento(g.getDataNasc());
+            return ResponseEntity.ok(dto);
         }
 
         if (staffService.autenticar(loginDTO.email(), loginDTO.senha())) {
-            return ResponseEntity.ok("Login realizado com sucesso! Tipo: STAFF");
+            Staff s = staffService.getByEmail(loginDTO.email());
+            PaginaUsuarioDTO dto = new PaginaUsuarioDTO();
+            dto.setNome(s.getNome());
+            dto.setCpf(s.getCpf());
+            dto.setFuncao("STAFF");
+            dto.setDataNascimento(s.getDataNasc());
+            return ResponseEntity.ok(dto);
         }
 
+        if (condutorService.autenticar(loginDTO.email(), loginDTO.senha())) {
+            Condutor c = condutorService.getByEmail(loginDTO.email());
+            PaginaUsuarioDTO dto = new PaginaUsuarioDTO();
+            dto.setNome(c.getNome());
+            dto.setCpf(c.getCpf());
+            dto.setFuncao("CONDUTOR");
+            dto.setDataNascimento(c.getDataNasc());
+            return ResponseEntity.ok(dto);
+        }
         return ResponseEntity.status(401).body("Email ou senha incorretos");
     }
 }

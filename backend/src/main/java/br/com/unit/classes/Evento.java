@@ -2,6 +2,9 @@ package br.com.unit.classes;
 
 import jakarta.persistence.*;
 import lombok.*;
+import java.util.List;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 @Data
 @NoArgsConstructor
@@ -10,7 +13,11 @@ import lombok.*;
 @Table(name = "eventos")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "tipo_evento", discriminatorType = DiscriminatorType.STRING)
-public abstract class Evento {
+@JsonIdentityInfo(
+        generator = ObjectIdGenerators.PropertyGenerator.class,
+        property = "idEvento"
+)
+public class Evento {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,6 +37,31 @@ public abstract class Evento {
 
     @Column(nullable = false)
     private int capacidade;
+
+    @ManyToMany
+    @JoinTable(
+    name = "evento_staff",
+    joinColumns = @JoinColumn(name = "idEvento"),
+    inverseJoinColumns = @JoinColumn(name = "idStaff"))
+    private List<Staff> staffs;
+
+    @ManyToMany
+    @JoinTable(
+    name = "evento_espectador",
+    joinColumns = @JoinColumn(name = "idEvento"),
+    inverseJoinColumns = @JoinColumn(name = "idEspectador"))
+    private List<Espectador> espectadores;
+
+    @ManyToMany
+    @JoinTable(
+    name = "evento_condutor",
+    joinColumns = @JoinColumn(name = "idEvento"),
+    inverseJoinColumns = @JoinColumn(name = "idCondutor"))
+    private List<Condutor> condutores;
+
+    @ManyToOne
+    @JoinColumn(name = "idGerente")
+    private Gerente gerente;
 
     public void mostrarInformacaoEvento() {
         System.out.println("ID do evento: " + this.idEvento);

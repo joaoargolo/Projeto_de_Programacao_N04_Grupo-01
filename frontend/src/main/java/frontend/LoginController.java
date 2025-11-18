@@ -4,6 +4,7 @@ import dto.PaginaUsuarioDTO;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
 import javafx.fxml.FXMLLoader;
@@ -17,7 +18,7 @@ public class LoginController {
     private TextField EmailLoginField;
 
     @FXML
-    private TextField SenhaLoginField;
+    private PasswordField SenhaLoginField;
 
     @FXML
     private Button EntrarBotao;
@@ -82,17 +83,6 @@ public class LoginController {
                     PaginaUsuarioController usuarioController = loader.getController();
 
                     PaginaUsuarioDTO usuario = UsuarioService.parseUsuarioJson(responseBody);
-
-                    System.out.println("DTO parseado:");
-                    System.out.println("Nome: " + usuario.getNome());
-                    System.out.println("CPF: " + usuario.getCpf());
-                    System.out.println("Função: " + usuario.getFuncao());
-                    System.out.println("Data Nascimento: " + usuario.getDataNascimento());
-                    System.out.println("Nome Evento: " + usuario.getNomeEvento());
-                    System.out.println("Descrição Evento: " + usuario.getDescricaoEvento());
-                    System.out.println("Data Início Evento: " + usuario.getDataInicioEvento());
-                    System.out.println("Data Fim Evento: " + usuario.getDataFimEvento());
-
                     usuarioController.carregarUsuario(usuario);
 
                     Stage stage = (Stage) EntrarBotao.getScene().getWindow();
