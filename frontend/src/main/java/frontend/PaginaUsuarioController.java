@@ -4,6 +4,7 @@ import javafx.fxml.FXML;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
+import dto.PaginaUsuarioDTO;
 
 public class PaginaUsuarioController {
 
@@ -44,6 +45,22 @@ public class PaginaUsuarioController {
 
     @FXML
     public void initialize() {
-        //sem funcao ainda
+        // sem função ainda
+    }
+
+    // ✅ Método que atualiza os campos da tela com os dados do DTO
+    public void carregarUsuario(PaginaUsuarioDTO usuario) {
+        if (usuario == null)
+            return;
+
+        textoNome.setText(usuario.getNome() != null ? usuario.getNome() : "—");
+        textoCpf.setText(usuario.getCpf() != null ? usuario.getCpf() : "—");
+        textoFuncao.setText(usuario.getFuncao() != null ? usuario.getFuncao() : "—");
+        textoDataNascimento.setText(usuario.getDataNascimento() != null ? usuario.getDataNascimento() : "—");
+
+        nomeEvento.setText(usuario.getNomeEvento() != null ? usuario.getNomeEvento() : "Nenhum evento");
+        descEvento.setText(usuario.getDescricaoEvento() != null ? usuario.getDescricaoEvento() : "—");
+        dataInicioEvento.setText(usuario.getDataInicioEvento() != null ? usuario.getDataInicioEvento() : "—");
+        dataEventoFim.setText(usuario.getDataFimEvento() != null ? usuario.getDataFimEvento() : "—");
     }
 }
